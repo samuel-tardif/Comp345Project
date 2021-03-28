@@ -17,29 +17,33 @@ BidingFacility::BidingFacility()
 	owner = new Player("Default");
 }
 
-//
+//Copy constructor
 BidingFacility::BidingFacility(const BidingFacility& copied)
 {
 	this->owner = new Player("Default");
 	*owner = *copied.getOwner();
 }
 
+//Operator = overload
 BidingFacility& BidingFacility::operator=(const BidingFacility& bF)
 {
 	*owner = *bF.getOwner();
 	return *this;
 }
 
+//Destructor
 BidingFacility::~BidingFacility()
 {
 	delete owner;
 }
 
+//Change payer assigned to facillity
 void BidingFacility::changeOwner(Player* newPlayer)
 {
 	owner = newPlayer;
 }
 
+//Take coin and make bid
 void BidingFacility::makeBid()
 {
 	owner->SetTokens(25);
@@ -49,12 +53,13 @@ void BidingFacility::makeBid()
 	BidingFacility::bidMap->insert(std::pair<Player*,int>(owner,bid));
 }
 
-
+//Retruns player
 Player* BidingFacility::getOwner() const
 {
 	return owner;
 }
 
+//This is what determines who won the bids
 Player* BidingFacility::resolveBids()
 {
 	Player* winner = new Player("aaaaaa");
@@ -72,9 +77,11 @@ Player* BidingFacility::resolveBids()
 		}
 	}
 	cout << "The winner is : " << winner->getName() << endl;
+	winner->PayCoin(maxBid);
 	return winner;
 }
 
+//String insertion operator overload
 std::ostream& operator<<(std::ostream& output, const BidingFacility& bf)
 {
 	output << "Biding facility owned by  " << bf.getOwner() << std::endl;
