@@ -12,6 +12,7 @@ For COMP 345 -Assignment 1
 #include <vector>
 #include <array>
 #include <iostream>
+#include <map>
 
 class Map {
 public:
@@ -32,11 +33,11 @@ public:
 	//Methods to manipulate map
 	void addTerritory();
 
-	void addTerritory(int own, int armies, int cont);
+	void addTerritory(int own, int armies1, int armies2, int cont);
 
 	void createConnection(int, int);
 
-	void changeNumberArmies(int index, int nbArmies);
+	void changeNumberArmies(int index, int nbArmies, int player);
 
 	void changeOwner(int index, int owner);
 	
@@ -51,14 +52,18 @@ public:
 
 		friend std::ostream& operator<< (std::ostream& output, const Territory& ter);
 		
+		Territory(int own, int armies1, int armies2, int cont);
+
 		//Getter
 		int getOwner() const;
-		int getNbArmies() const;
+		int getNbArmies1() const;
+		int getNbArmies2() const;
 		int getContinent() const;
 
 		//Setter
 		void setOwner(int);
-		void setNbArmies(int);
+		void setNbArmies1(int newNbArmies);
+		void setNbArmies2(int);
 		void setContinent(int);
 
 
@@ -80,7 +85,8 @@ public:
 
 		//Variables
 		int* owner;
-		int* nbArmies;
+		int* nbArmies1;
+		int* nbArmies2;
 		int* continent;
 	};
 
@@ -100,6 +106,7 @@ public:
 	
 private:
 
+	
 	//Variables
 	std::vector<std::vector<Territory*>>* territoriesVector = NULL;
 };

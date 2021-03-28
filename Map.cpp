@@ -196,10 +196,10 @@ void Map::addTerritory()
 }
 
 //Creates a territory with assigned values in map
-void Map::addTerritory(int own, int armies, int cont)
+void Map::addTerritory(int own, int armies1, int armies2, int cont)
 {
 	std::vector<Map::Territory*> v;
-	v.push_back(new Territory(own,armies,cont));
+	v.push_back(new Territory(own, armies1, armies2, cont));
 	territoriesVector->push_back(v);
 	int index = territoriesVector->size() - 1;
 	cout << "New territory added to territoriesVector index :" << index << endl;
@@ -207,15 +207,17 @@ void Map::addTerritory(int own, int armies, int cont)
 
 //Default Constructor
 Map::Territory::Territory() {
-	nbArmies = new int(0);
+	nbArmies1 = new int(0);
+	nbArmies2 = new int(0);
 	owner = new int(0);
 	continent = new int(1);
 }
 
 //Constructor with parameters
-Map::Territory::Territory(int own, int armies, int cont)
+Map::Territory::Territory(int own, int armies1,int armies2, int cont)
 {
-	nbArmies = new int(armies);
+	nbArmies2 = new int(armies1);
+	nbArmies1 = new int(armies2);
 	owner = new int(own);
 	continent = new int(cont);
 }
@@ -223,10 +225,12 @@ Map::Territory::Territory(int own, int armies, int cont)
 //Copy constructor
 Map::Territory::Territory(const Territory &ter)
 {
-	nbArmies = new int(0);
+	nbArmies1 = new int(0);
+	nbArmies2 = new int(0);
 	owner = new int(0);
 	continent = new int(0);
-	*this->nbArmies = ter.getNbArmies();
+	*this->nbArmies1 = ter.getNbArmies1();
+	*this->nbArmies1 = ter.getNbArmies2();
 	*this->owner = ter.getOwner();
 	*this->continent = ter.getOwner();
 }
@@ -235,7 +239,8 @@ Map::Territory::Territory(const Territory &ter)
 Map::Territory::~Territory()
 {
 	delete owner;
-	delete nbArmies;
+	delete nbArmies1;
+	delete nbArmies2;
 	delete continent;
 }
 
@@ -257,13 +262,21 @@ void Map::createConnection(int firstTer, int secondTer)
 	}
 }
 
-
 //Change a value of nb armies on territory from index
-void Map::changeNumberArmies(int index,int nbArmies)
+void Map::changeNumberArmies(int index, int nbArmies, int player)
 {
-	territoriesVector->at(index).at(0)->setNbArmies(nbArmies);
+	if (player == 1) {
+		territoriesVector->at(index).at(0)->setNbArmies1(nbArmies);
+	}
+	else {
+		territoriesVector->at(index).at(0)->setNbArmies2(nbArmies);
+	}
 	cout << "Territory " << index << " now has " << nbArmies << " armies" << endl;
 }
+
+
+
+
 
 //Change owner from index
 void Map::changeOwner(int index, int owner)
@@ -292,10 +305,16 @@ int Map::Territory::getOwner() const
 }
 
 //Standard getter
-int Map::Territory::getNbArmies() const
+int Map::Territory::getNbArmies1() const
 {
-	return *nbArmies;
+	return *nbArmies1;
 }
+
+int Map::Territory::getNbArmies2() const
+{
+	return *nbArmies2;
+}
+
 
 //Standard getter
 int Map::Territory::getContinent() const
@@ -310,10 +329,15 @@ void Map::Territory::setOwner(int newOwner)
 }
 
 //Standard setter
-void Map::Territory::setNbArmies(int newNbArmies)
+void Map::Territory::setNbArmies1(int newNbArmies)
 {
-	*nbArmies = newNbArmies;
+	*nbArmies1 = newNbArmies;
 }
+void Map::Territory::setNbArmies2(int newNbArmies)
+{
+	*nbArmies2 = newNbArmies;
+}
+
 //Standard setter
 void Map::Territory::setContinent(int cont)
 {
@@ -323,7 +347,8 @@ void Map::Territory::setContinent(int cont)
 //Overriding = operator for TErritory
 Map::Territory& Map::Territory::operator= (const Map::Territory& ter){
 	*owner = ter.getOwner();
-	*nbArmies = ter.getNbArmies();
+	*nbArmies1 = ter.getNbArmies1();
+	*nbArmies2 = ter.getNbArmies2();
 	*continent = ter.getContinent();
 
 	return *this;
@@ -332,7 +357,7 @@ Map::Territory& Map::Territory::operator= (const Map::Territory& ter){
 //Overriding string insertion for Territory
 std::ostream& operator<<(std::ostream& output, const Map::Territory& ter)
 {
-		output << "Territory owned by player " << ter.getOwner() << " and is occupied by " << ter.getNbArmies() << " armies on continent " << ter.getContinent() << std::endl;
+		output << "Territory owned by player " << ter.getOwner() << " and is occupied by " << ter.getNbArmies1() << " armies of player 1 and "<<ter.getNbArmies2()<<" armies of player 2 on continent " << ter.getContinent() << std::endl;
 		return output;
 }
 
