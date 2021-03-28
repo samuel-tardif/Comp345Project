@@ -24,13 +24,13 @@ int main()
     Map* m = new Map();
 
     //Creating territories
-    m->addTerritory(0,0,1);
+    m->addTerritory(0,0,0,1);
    
-    m->addTerritory(0,0,1);
+    m->addTerritory(0,0,0,1);
 
-    m->addTerritory(0, 0, 2);
+    m->addTerritory(0, 0,0, 2);
 
-    m->addTerritory(0, 0, 2);
+    m->addTerritory(0, 0,0, 2);
 
     //Linking them
     m->createConnection(0, 1);
@@ -80,13 +80,13 @@ int main()
     Map* m3 = new Map();
 
     //Creating territories
-    m3->addTerritory(0, 0, 1);
+    m3->addTerritory(0,0,0, 1);
 
-    m3->addTerritory(0, 0, 1);
+    m3->addTerritory(0,0, 0, 1);
 
-    m3->addTerritory(0, 0, 2);
+    m3->addTerritory(0,0, 0, 2);
 
-    m3->addTerritory(0, 0, 2);
+    m3->addTerritory(0,0, 0, 2);
 
     //Linking them
     m3->createConnection(0, 1);
