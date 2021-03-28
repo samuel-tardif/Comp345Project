@@ -43,6 +43,8 @@ public:
 	
 	void changeContinent(int index, int owner);
 
+
+
 	class Territory {
 
 		
