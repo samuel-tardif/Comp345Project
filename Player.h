@@ -21,7 +21,6 @@ class Player {
 	private:
 		int *coins;
 		int *birthday;
-		int *playerID; //Maybe not needed
 		Hand *hand;
 
 		int *cubes; //Armies
@@ -43,36 +42,30 @@ public:
 	//Actions
 	bool payCoin(int cost);
 	void placeNewArmies(Map m, int numArmies, int index, int player);
-	void MoveArmies(int movearmy);
-	void MoveOverLand(int moveoverland);
-	void BuildCity(int buildcity);
-	void DestroyArmy(int destroyarmy);
+	void MoveArmies(int nbarmy, Map &start, Map &stop);
+	void MoveOverLand(int nbarmies, Map& start, Map& stop);
+	void BuildCity(Map& cityplace);
+	void DestroyArmy(Map &armyplace, Player& armyowner);
 	void initializeHand();
 	void printHand();
-
+	//mutators
 	void setName(std::string name);
 	void SetCubes(int cubes);
 	void SetDisks(int disks);
 	void SetTokens(int tokens);
 	void setCountries(int countries);
-
-	//Added
-	void setPlayerID(int x);
-	void setBirthday();
 	void setCoins(int coins);
 	void setBid();
-	int getPlayerID();
-	int getBirthday();
+	void setHand(vector<Cards> v);
+	//accessors
 	int getCoins();
-
 	vector<Cards> getHand();
 	void setHand(vector<Cards> v);
-	
-	int getCountries() const;
 	int getCubes() const;
 	int getDisks() const;
 	int getTokens() const;
 	std::string getName() const;
+	int getPlayerID();
 	//BiddingFacility* getBiddingFacility() const;
 	~Player();
 	//BiddingFacility *biddingFacility;
