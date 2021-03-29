@@ -216,8 +216,8 @@ Map::Territory::Territory() {
 //Constructor with parameters
 Map::Territory::Territory(int own, int armies1,int armies2, int cont)
 {
-	nbArmies2 = new int(armies1);
-	nbArmies1 = new int(armies2);
+	nbArmies1 = new int(armies1);
+	nbArmies2 = new int(armies2);
 	owner = new int(own);
 	continent = new int(cont);
 }
