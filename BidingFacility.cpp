@@ -14,7 +14,14 @@ map<Player*, int>* BidingFacility::bidMap = new map<Player*, int>;
 //Default constructor
 BidingFacility::BidingFacility()
 {
+	_bidAmount = 0;
 	owner = new Player("Default");
+}
+
+//Parameterized Constructor (added)
+BidingFacility::BidingFacility(int bidAmount) {
+	owner = new Player("Default");
+	_bidAmount = new int(bidAmount);
 }
 
 //Copy constructor
@@ -47,7 +54,7 @@ void BidingFacility::changeOwner(Player* newPlayer)
 void BidingFacility::makeBid()
 {
 	owner->SetTokens(25);
-	cout << "Press a number 0-9 to make bid" << endl;
+	cout << "Player " << owner << ", press a number 0-9 to make bid" << endl; //Changed
 	int bid;
 	std::cin >> bid;
 	BidingFacility::bidMap->insert(std::pair<Player*,int>(owner,bid));
@@ -77,9 +84,10 @@ Player* BidingFacility::resolveBids()
 		}
 	}
 	cout << "The winner is : " << winner->getName() << endl;
-	winner->PayCoin(maxBid);
+	winner->payCoin(maxBid);
 	return winner;
 }
+
 
 //String insertion operator overload
 std::ostream& operator<<(std::ostream& output, const BidingFacility& bf)

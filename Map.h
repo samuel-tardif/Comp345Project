@@ -110,4 +110,3 @@ private:
 	//Variables
 	std::vector<std::vector<Territory*>>* territoriesVector = NULL;
 };
-
