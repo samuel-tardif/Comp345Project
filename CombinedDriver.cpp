@@ -5,7 +5,6 @@
 #include "MapLoader.h"
 #include <string>;
 #include "Player.h"
-#include "MapLoader.h"
 
 int main() {
 
@@ -122,7 +121,7 @@ int main() {
     cout << endl << "------------------------Start of card driver----------------------" << endl << endl;
     //Cards driver--------------------------------------------------------------------------
     Deck* deck1 = new Deck();
-    joueur* p1 = new joueur("Player");
+    Player* p1 = new Player("Player");
     std::vector<Cards*> tb = deck1->topBoardGenetor(*deck1);
     std::vector<Cards*> hand = std::vector<Cards*>();
     deck1->exchange(*p1, tb, *deck1);

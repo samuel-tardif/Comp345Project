@@ -43,6 +43,8 @@ public:
 	
 	void changeContinent(int index, int owner);
 
+
+
 	class Territory {
 
 		
@@ -110,4 +112,3 @@ private:
 	//Variables
 	std::vector<std::vector<Territory*>>* territoriesVector = NULL;
 };
-

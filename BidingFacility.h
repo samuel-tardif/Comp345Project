@@ -26,6 +26,9 @@ public:
 	//Default constructor
 	BidingFacility();
 
+	//Parameterized Constructor (added)
+	BidingFacility(int bidAmount);
+
 	//Copy constructor
 	BidingFacility(const BidingFacility& copied);
 
@@ -51,10 +54,17 @@ public:
 	//Determines who wins the bid
 	static Player* resolveBids();
 
+	//Added accessors and mutators
+	int getBidAmount();
+
+	//Added functions...
+	int calculateBidList(vector<int> bidlist);
+
 private:
 
 	//Player assigned to biding facility
 	Player* owner;
+	int* _bidAmount; //Added
+	int* birthdate; //Added
 	
 };
-

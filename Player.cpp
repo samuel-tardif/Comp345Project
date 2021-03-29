@@ -7,16 +7,23 @@ For COMP 345 -Assignment 1
 #include <iostream>
 #include <string>
 #include "Player.h"
+#include "BidingFacility.h"
 #include "Map.h"
 
-
-void Player::SetCubes(int cubes) {
-	Player::cubes = &cubes;
+Player::Player()
+{
+    this->coins = nullptr;
+    this->name = nullptr;
+	this->name = nullptr;
+	this->disks = nullptr;
+	this->cubes = nullptr;
+	this->tokens = nullptr;
+	this->hand = nullptr; //Object of Hand class
 }
 
-std::vector<Cards*>* Player::getGameHand() const
-{
-	return gameHand;
+//Mutators
+void Player::SetCubes(int cubes) {
+	Player::cubes = &cubes;
 }
 
 void Player::SetDisks(int disks) {
@@ -32,6 +39,13 @@ void Player::setCountries(int countries)
 {
 	*Player::countries = countries;
 }
+
+//Mutators for coins 
+void Player::setCoins(int coins) {
+	 *Player::coins = coins; 
+}
+
+
 
 int Player::getCountries() const
 {
@@ -53,18 +67,23 @@ int Player::getTokens() const
 	return *tokens;
 }
 
-
-
 std::string Player::getName() const
 {
 	return *name;
 }
+
+void Player::setBid() {
+	playerBid = new BidingFacility();
+	playerBid->makeBid();
+}
+
 
 //BiddingFacility *Player::getBiddingFacility() const 
 //{
 	//return BiddingFacility;
 //}
 
+//Destructors
 Player::~Player()
 {
 	if (name) { delete name; }
@@ -72,37 +91,46 @@ Player::~Player()
 	if (disks) { delete& disks; }
 	if (tokens) { delete& tokens; }
 	//if (BiddingFacility) { delete &biddingFacility; }
-	if (gameHand) { delete gameHand; }
 }
 
 
-
-Player::Player()
-{
-	Player::name = new std::string("Default");
-	Player::disks = new int(3);
-	Player::cubes = new int(18);
-	Player::tokens = new int(4);
-	Player::gameHand = new std::vector<Cards*>();
-}
-
+//Parameterized constructors
 Player::Player(std::string name)
 {
 	Player::name = new std::string(name);
 	Player::disks = new int(3);
 	Player::cubes = new int(18);
 	Player::tokens = new int(4);
-	Player::gameHand = new std::vector<Cards*>();
+	Player::hand = new Hand();
 }
 
-void Player::PayCoin(int coin)
+bool Player::payCoin(int cost)
 {
-	std::cout << "pays coin" << std::endl;
+    if (*coins < cost) {
+        std::cout << "You don't have enough coins to purchase that." << std::endl;
+        return false;
+    }
+    else {
+        setCoins(*coins - cost);
+        std::cout << "Successful purchase " << *name << ", you have " << *coins << " coins remaining in your pile." << std::endl << std::endl;
+        return true;
+    }
 }
 
-void Player::PlaceNewArmies(int placenewarmy)
-{
-	std::cout << "places new army" << std::endl;
+//Actions
+void Player::placeNewArmies(Map m, int numArmies, int index, int player) {
+	
+	//Check army availability. Can't place an army if theyre all already deployed
+
+	if ((*cubes - numArmies) >= 0) {
+
+		*cubes - numArmies;
+		m.changeNumberArmies(index, numArmies, player+1);
+
+	}else {
+		//If the player has too few armies
+		cerr << "\nOperation blocked. You only have " << *cubes << " armies available to you.";
+	}
 }
 
 void Player::MoveArmies(int movearmy)
@@ -131,4 +159,21 @@ void Player::setName(std::string name)
 {
 	*Player::name = name;
 }
+
+//Hand related
+void Player::initializeHand() {
+	hand = new Hand();
+}
+
+void Player::printHand() {
+	hand->printHand();
+}
+
+vector<Cards> Player::getHand() {
+	return hand->getHand();
+}
+
+void Player::setHand(vector<Cards> v) {
+	hand->swapHand(v);
+} 
 
