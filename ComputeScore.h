@@ -8,7 +8,6 @@ For COMP 345 -Assignment 2
 #pragma once
 //Code for part 6, computeScore
 
-#pragma once
 
 //Includes
 #include <iostream>
@@ -45,6 +44,8 @@ public:
 	//Computes the scores and determines the winner
 	Player* determineWinner();
 
+	void tallyGameHand(std::vector<Cards*> p1GameHand, int* player1CardScore, int* playerElixir, Player* player);
+
 	void tallyContinent(int contIndex, int* player1Continent, int* player2Continent, int* player1Territories, int* player2Territories, int* player1TotalArmies, int* player2TotalArmies);
 
 	void DFS(int visiting, vector<bool>* visited, int* player1Territories, int* player2Territories, int* player1TotalArmies, int* player2TotalArmies);
@@ -59,7 +60,7 @@ public:
 	//Setters
 	void setPlayer1(Player* player1);
 	void setPlayer2(Player* player2);
-	void setPlayer2(Map* map);
+	void setMap(Map* map);
 	
 
 private:

@@ -54,6 +54,7 @@ public:
 
 		friend std::ostream& operator<< (std::ostream& output, const Territory& ter);
 		
+		//Constructor with parameters
 		Territory(int own, int armies1, int armies2, int cont);
 
 		//Getter
@@ -73,9 +74,6 @@ public:
 		//Constructors
 		//Default constructor
 		Territory();
-
-		//Constructor with parameters (will be used by copy constructor)
-		Territory(int own, int armies, int continent);
 		
 		//Copy constructor (as required)
 		Territory(const Territory &ter);
