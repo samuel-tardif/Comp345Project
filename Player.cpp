@@ -20,7 +20,31 @@ Player::Player()
 	this->tokens = nullptr;
 	this->hand = nullptr; //Object of Hand class
 }
+//copy constructors
+Player::Player(const Player& copied)
+{
+	Player::name = new std::string("name");
+	Player::disks = new int(3);
+	Player::cubes = new int(18);
+	Player::tokens = new int(4);
+	Player::gameHand = new std::vector<Cards*>();
+	*Player::name = copied.getName();
+	*Player::disks = copied.getDisks();
+	*Player::cubes = copied.getCubes();
+	*Player::tokens = copied.getTokens();
+	*Player::gameHand = *copied.getGameHand();
 
+}
+
+Player& Player::operator=(const Player& copied)
+{
+	*Player::name = copied.getName();
+	*Player::disks = copied.getDisks();
+	*Player::cubes = copied.getCubes();
+	*Player::tokens = copied.getTokens();
+	*Player::gameHand = *copied.getGameHand();
+	return *this;
+}
 
 /*void Player::setBid() {
 	BidingFacility playerBid = new BidingFacility();
@@ -96,9 +120,9 @@ int Player::getCoins()
 Player::~Player()
 {
 	if (name) { delete name; }
-	if (cubes) { delete& cubes; }
-	if (disks) { delete& disks; }
-	if (tokens) { delete& tokens; }
+	if (cubes) { delete cubes; }
+	if (disks) { delete disks; }
+	if (tokens) { delete tokens; }
 	//if (BiddingFacility) { delete &biddingFacility; }
 }
 
