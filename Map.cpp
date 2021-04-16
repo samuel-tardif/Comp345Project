@@ -216,8 +216,8 @@ Map::Territory::Territory() {
 //Constructor with parameters
 Map::Territory::Territory(int own, int armies1,int armies2, int cont)
 {
-	nbArmies2 = new int(armies1);
-	nbArmies1 = new int(armies2);
+	nbArmies1 = new int(armies1);
+	nbArmies2 = new int(armies2);
 	owner = new int(own);
 	continent = new int(cont);
 }
@@ -263,13 +263,19 @@ void Map::createConnection(int firstTer, int secondTer)
 }
 
 //Change a value of nb armies on territory from index
-void Map::changeNumberArmies(int index, int nbArmies, int player)
+void Map::changeNumberArmies(int index, int nbArmies, int player) //0, 4, 1
 {
+	cout << "Good until here 2.6" << endl;
 	if (player == 1) {
-		territoriesVector->at(index).at(0)->setNbArmies1(nbArmies);
+		cout << "Good until here 2.7.1" << endl;
+		territoriesVector->at(index).at(0)->setNbArmies1(nbArmies); //Problem happening here
+		//territoriesVector[0, 0] set number of armies to 4
+		cout << "Good until here 2.7.1.2" << endl;
 	}
 	else {
+		cout << "Good until here 2.7.2" << endl;
 		territoriesVector->at(index).at(0)->setNbArmies2(nbArmies);
+		cout << "Good until here 2.7.2.2" << endl;
 	}
 	cout << "Territory " << index << " now has " << nbArmies << " armies" << endl;
 }
