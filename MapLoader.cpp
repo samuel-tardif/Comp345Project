@@ -28,12 +28,12 @@ MapLoader::MapLoader() {
 //copy constructor
 MapLoader::MapLoader(const MapLoader& copied) {
 
-	this-> filename = copied.getFileName();
-	this-> m = copied.getMap();
+	this->filename = copied.getFileName();
+	this->m = copied.getMap();
 };
 //operator overload
 MapLoader& MapLoader::operator=(const MapLoader& g) {
-	string *file = new string;
+	string* file = new string;
 	file = g.getFileName();
 	m = g.getMap();
 	return *this;
@@ -52,31 +52,32 @@ void MapLoader::setMap(Map t) {
 	*m = t;
 };
 
-string* MapLoader::getFileName() const {
+std::string* MapLoader::getFileName() const {
 	return filename;
 };
 
-void MapLoader::setFileName(string newFile) {
+void MapLoader::setFileName(std::string newFile) {
 	*filename = newFile;
 };
 
 //generate map method
 void MapLoader::GenerateMap() {
 	//opens the file
-	std::ifstream myfile(*filename, std::ios_base::in);
-
+	std::fstream myfile;
+	myfile.open(*filename, std::fstream::in);
 
 	int a, b, c = 0;
-	ifstream input(*filename);
+	//ifstream input(*filename);
 	//checks if file is opened or not
-	if (input.is_open()) {
+	if (myfile.is_open()) {
 		cout << "file opened successfully" << endl;
 	}
 	else {
-		cout << "error" << endl;
+		cout << "Error openning file" << endl;
+		exit(1);
 	}
 	//parses through the a to create territories
-	while (input >> a) {
+	while (myfile >> a) {
 
 		//breaks if delimiter is found
 		if (a == 99) {
@@ -87,7 +88,7 @@ void MapLoader::GenerateMap() {
 		}
 	}
 	//parses through pairs of connections to create connections
-	while (input >> b >> c) {
+	while (myfile >> b >> c) {
 		m->createConnection(b, c);
 	}
 
@@ -100,7 +101,13 @@ void MapLoader::GenerateMap() {
 		cout << *v->at(i).at(0) << endl;
 	}
 	//validates map object
-	m->validate();
+	//m->validate();
+	if (!m->validate()) {
+		cout << "Map is invalid, please enter a valid map" << endl;
+		exit(1);
+	}
 };
+
+
 
 
