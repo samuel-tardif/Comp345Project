@@ -39,6 +39,18 @@ public:
 	//Parameterized constructor
 	Player(std::string name);
 
+	Player(const Player& copied);
+	Player& operator=(const Player& copied);
+
+
+	void PayCoin(int coin);
+	void PlaceNewArmies(int placenewarmy);
+	void MoveArmies(int movearmy);
+	void MoveOverLand(int moveoverland);
+	void BuildCity(int buildcity);
+	void DestroyArmy(int destroyarmy);
+
+
 	//Actions
 	bool payCoin(int cost);
 	void placeNewArmies(Map m, int numArmies, int index, int player);
@@ -53,6 +65,7 @@ public:
 	void SetCubes(int cubes);
 	void SetDisks(int disks);
 	void SetTokens(int tokens);
+
 	void setCountries(int countries);
 	void setCoins(int coins);
 	void setBid();
@@ -61,6 +74,7 @@ public:
 	int getCoins();
 	vector<Cards> getHand();
 	void setHand(vector<Cards> v);
+
 	int getCubes() const;
 	int getDisks() const;
 	int getTokens() const;
@@ -68,6 +82,19 @@ public:
 	int getPlayerID();
 	//BiddingFacility* getBiddingFacility() const;
 	~Player();
+
+	
+
+
+private:
+	
+	int *cubes;
+	int *disks;
+	int *tokens;
+	//int* countries;
+	std::string* name;
+	std::vector<Cards*>* gameHand;
+
 	//BiddingFacility *biddingFacility;
 	
 		

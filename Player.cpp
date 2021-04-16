@@ -4,9 +4,9 @@ ID: 40111703
 Date : 21/02/2021
 For COMP 345 -Assignment 1
 ------------------------------------------------------------------------------------------------*/
-#include <iostream>
-#include <string>
+#pragma once
 #include "Player.h"
+
 #include "BidingFacility.h"
 #include "Map.h"
 
@@ -33,6 +33,7 @@ Player::Player(const Player& copied)
 	*Player::cubes = copied.getCubes();
 	*Player::tokens = copied.getTokens();
 	*Player::gameHand = *copied.getGameHand();
+
 
 }
 
@@ -63,13 +64,19 @@ void Player::SetDisks(int disks) {
 
 void Player::SetTokens(int tokens)
 {
-	Player::tokens = &tokens;
+	*Player::tokens = tokens;
 }
 
-void Player::setCountries(int countries)
+/*void Player::setCountries(int countries)
 {
 	*Player::countries = countries;
-}
+}*/
+
+
+/*int Player::getCountries() const
+{
+	return *countries;
+}*/
 
 //Added by Bumsu David Park
 
@@ -77,6 +84,7 @@ void Player::setCountries(int countries)
 void Player::setCoins(int coins) {
 	*Player::coins = coins;
 }
+
 
 
 
@@ -135,6 +143,32 @@ Player::Player(std::string name)
 	Player::cubes = new int(18);
 	Player::tokens = new int(4);
 	Player::hand = new Hand();
+}
+
+
+Player::Player(const Player& copied)
+{
+	Player::name = new std::string("name");
+	Player::disks = new int(3);
+	Player::cubes = new int(18);
+	Player::tokens = new int(4);
+	Player::gameHand = new std::vector<Cards*>();
+	*Player::name = copied.getName();
+	*Player::disks = copied.getDisks();
+	*Player::cubes = copied.getCubes();
+	*Player::tokens = copied.getTokens();
+	*Player::gameHand = *copied.getGameHand();
+
+}
+
+Player& Player::operator=(const Player& copied)
+{
+	*Player::name = copied.getName();
+	*Player::disks = copied.getDisks();
+	*Player::cubes = copied.getCubes();
+	*Player::tokens = copied.getTokens();
+	*Player::gameHand = *copied.getGameHand();
+	return *this;
 }
 
 bool Player::payCoin(int cost)
