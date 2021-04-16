@@ -101,21 +101,25 @@ Player& Player::operator=(const Player& p)
 //Mutators
 void Player::SetCubes(int cubes) {
 	Player::cubes = &cubes;
+	this->Notify();
 }
 
 void Player::SetDisks(int disks) {
 	Player::disks = &disks;
+	this->Notify();
 }
 
 void Player::SetTokens(int tokens)
 {
 	*Player::tokens = tokens;
+	this->Notify();
 }
 
 
 /*void Player::setCountries(int countries)
 {
 	*Player::countries = countries;
+	this->Notify();
 }*/
 
 
@@ -129,6 +133,7 @@ void Player::SetTokens(int tokens)
 //Mutators for coins 
 void Player::setCoins(int coins) {
 	this->coins = new int(coins);
+	this->Notify();
 }
 
 int *Player::getCubes() const

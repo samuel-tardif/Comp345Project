@@ -1,4 +1,7 @@
+#pragma once
+
 #include "Cards.h"
+#include "Hand.h"
 
 Hand::Hand() : hand() {
 }
@@ -29,6 +32,7 @@ void Hand::setHand(Cards c) {
 	insertedCard = new Cards(c);
 	hand.push_back(*insertedCard);
 	cout << "Top card is now: " << hand[0] << endl;
+	this->Notify();
 
 }
 

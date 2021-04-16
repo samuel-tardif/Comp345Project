@@ -7,12 +7,15 @@
 #include <ctime>
 #include <algorithm>
 #include <iostream>
+
 #include "Player.h"
+#include "GameObservers.h"
+
 using namespace std;
 
 class Cards;
 
-class Hand {
+class Hand : public Observable {
 
     private:
 
