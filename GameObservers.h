@@ -1,6 +1,8 @@
 #pragma once
 
 #include "map.h"
+#include "player.h"
+#include "GameState.h"
 #include <list>
 
 using namespace std;
@@ -40,8 +42,25 @@ private:
 
 
 //Player observer implementation----------------------------------------------------------------------------
-
+class PlayerObserver : public Observer {
+public:
+	PlayerObserver(Player* s);
+	~PlayerObserver();
+	void Update();
+	void display();
+private:
+	Player* _subject;
+};
 
 
 
 //Game state observer implementation----------------------------------------------------------------------------
+class GameStateObserver : public Observer {
+public:
+	GameStateObserver(GameState* s);
+	~GameStateObserver();
+	void Update();
+	void display();
+private:
+	GameState* _subject;
+};

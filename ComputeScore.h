@@ -11,7 +11,7 @@ For COMP 345 -Assignment 2
 
 //Includes
 #include <iostream>
-#include <conio.h>
+#include "Hand.h"
 #include "Player.h"
 #include "Cards.h"
 #include "Map.h"
@@ -44,7 +44,7 @@ public:
 	//Computes the scores and determines the winner
 	Player* determineWinner();
 
-	void tallyGameHand(std::vector<Cards*> p1GameHand, int* player1CardScore, int* playerElixir, Player* player);
+	void tallyGameHand(Hand p1GameHand, int* player1CardScore, int* playerElixir, Player* player);
 
 	void tallyContinent(int contIndex, int* player1Continent, int* player2Continent, int* player1Territories, int* player2Territories, int* player1TotalArmies, int* player2TotalArmies);
 

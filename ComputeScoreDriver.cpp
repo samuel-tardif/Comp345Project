@@ -58,7 +58,7 @@ int main() {
     CS->setMap(m);
     CS->setPlayer1(&player1);                                                                 //--To uncomment if fix
     CS->setPlayer2(&player2);                                                                 //--To uncomment if fix
-    player1.getGameHand()->push_back(new Cards("Ancient Sage", "+1 VP PER ANCIENT", "---"));  //--To uncomment if fix
+    //player1.getGameHand()->push_back(new Cards("Ancient Sage", "+1 VP PER ANCIENT", "---"));  //--To uncomment if fix
 
     CS->determineWinner();
 

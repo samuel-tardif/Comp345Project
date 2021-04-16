@@ -18,6 +18,11 @@ BidingFacility::BidingFacility()
 	owner = new Player("Default");
 }
 
+BidingFacility::BidingFacility(Player* player) {
+	_bidAmount = 0;
+	owner = player;
+}
+
 //Parameterized Constructor (added)
 BidingFacility::BidingFacility(int bidAmount) {
 	owner = new Player("Default");
@@ -54,7 +59,7 @@ void BidingFacility::changeOwner(Player* newPlayer)
 void BidingFacility::makeBid()
 {
 	owner->SetTokens(25);
-	cout << "Player " << owner << ", press a number 0-9 to make bid" << endl; //Changed
+	cout << owner->getNameForOthers() << ", press a number 0-9 to make bid" << endl; //Changed
 	int bid;
 	std::cin >> bid;
 	BidingFacility::bidMap->insert(std::pair<Player*,int>(owner,bid));
@@ -67,9 +72,9 @@ Player* BidingFacility::getOwner() const
 }
 
 //This is what determines who won the bids
-Player* BidingFacility::resolveBids()
+Player* BidingFacility::resolveBids(vector<Player*> players)
 {
-	Player* winner = new Player("aaaaaa");
+	Player* winner = new Player("Winner");
 	int maxBid = 0;
 
 	for (std::map<Player*, int>::iterator it = bidMap->begin(); it != bidMap->end(); ++it) {
@@ -78,13 +83,16 @@ Player* BidingFacility::resolveBids()
 			winner = it->first;
 		}
 		if (it->second == maxBid) {
-			if (it->first->getName().compare(winner->getName())<0) {
+			if (it->first->getNameForOthers().compare(winner->getNameForOthers())<0) {
 				winner = it->first;
 			}
 		}
 	}
-	cout << "The winner is : " << winner->getName() << endl;
-	winner->payCoin(maxBid);
+	cout << "The winner is : " << winner->getNameForOthers() << endl;
+	winner->payCoin(maxBid); //Segmentation fault in Player payCoin / getCoin function
+	//This is because the winner (Player object) is a newly created Player object and has the coin member as nullptr.
+	//Seems to be bidingfacility's problem (maybe with map?)
+	//Solution: The input for BiddingFacility constructor had to be Player pointer.
 	return winner;
 }
 
