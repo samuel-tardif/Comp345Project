@@ -68,8 +68,19 @@ public:
 
 	void setCountries(int countries);
 	void setCoins(int coins);
+<<<<<<< Updated upstream
 	void setBid();
 	void setHand(vector<Cards> v);
+=======
+	std::string getNameForOthers() const;
+
+	/*
+	Changing this now
+	*/
+	void setBid(Player* player);
+
+	void setHand(vector<Cards*>& v);
+>>>>>>> Stashed changes
 	//accessors
 	int getCoins();
 	vector<Cards> getHand();
@@ -83,8 +94,6 @@ public:
 	//BiddingFacility* getBiddingFacility() const;
 	~Player();
 
-	
-
 
 private:
 	
@@ -97,7 +106,16 @@ private:
 
 	//BiddingFacility *biddingFacility;
 	
+<<<<<<< Updated upstream
 		
 	
+=======
+	vector<Cards*>& getHandContent();
+	
+	int getCubesForOthers() const;
+	int getCoinsForOthers() const;
+
+	vector<Cards*>& getHandSize();
+>>>>>>> Stashed changes
 
 };

@@ -11,9 +11,9 @@ For COMP 345 -Assignment 1
 
 //Includes
 #include <iostream>
-#include <conio.h>
 #include "Player.h"
 
+class Player;
 
 using namespace std;
 
@@ -26,6 +26,7 @@ public:
 	BidingFacility();
 
 	//Parameterized Constructor (added)
+	BidingFacility(Player* player);
 	BidingFacility(int bidAmount);
 
 	//Copy constructor
@@ -51,7 +52,7 @@ public:
 	Player* getOwner() const;
 
 	//Determines who wins the bid
-	static Player* resolveBids();
+	static Player* resolveBids(vector<Player*> players);
 
 	//Added accessors and mutators
 	int getBidAmount();
