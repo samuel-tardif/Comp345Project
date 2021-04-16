@@ -44,21 +44,21 @@ int main() {
     
 
     //Creating our players
-    //cout << "Players created" << endl;
+    cout << "Players created" << endl;
     //Player class is still not fixed
 
 
-    //Player player1 = Player("Sam");                                                             //--To uncomment if fix player
-    //Player player2 = Player("Hugo");                                                          //  --To uncomment if fix player
+    Player player1 = Player("Sam");                                                             //--To uncomment if fix player
+    Player player2 = Player("Hugo");                                                          //  --To uncomment if fix player
 
     //Creating our ComputeScore object
     ComputeScore* CS = new ComputeScore();
     
     //Giving our parameters to the point calculator
     CS->setMap(m);
-    //CS->setPlayer1(&player1);                                                                 //--To uncomment if fix
-    //CS->setPlayer2(&player2);                                                                 //--To uncomment if fix
-    //player1.getGameHand()->push_back(new Cards("Ancient Sage", "+1 VP PER ANCIENT", "---"));  //--To uncomment if fix
+    CS->setPlayer1(&player1);                                                                 //--To uncomment if fix
+    CS->setPlayer2(&player2);                                                                 //--To uncomment if fix
+    player1.getGameHand()->push_back(new Cards("Ancient Sage", "+1 VP PER ANCIENT", "---"));  //--To uncomment if fix
 
     CS->determineWinner();
 

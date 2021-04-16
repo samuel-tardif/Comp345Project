@@ -88,7 +88,7 @@ Player* ComputeScore::determineWinner()
 	//Check points from game hand
 	//Retrieving game hands
 	std::vector<Cards*> p1GameHand = *player1->getGameHand();
-	std::vector<Cards*> p2GameHand = *player1->getGameHand();
+	std::vector<Cards*> p2GameHand = *player2->getGameHand();
 
 	//Setting up lixirs totals
 	int* p1Elixirs = new int(0);

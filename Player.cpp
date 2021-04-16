@@ -4,11 +4,8 @@ ID: 40111703
 Date : 21/02/2021
 For COMP 345 -Assignment 1
 ------------------------------------------------------------------------------------------------*/
-#include <iostream>
-#include <string>
+#pragma once
 #include "Player.h"
-#include "Map.h"
-
 
 void Player::SetCubes(int cubes) {
 	Player::cubes = &cubes;
@@ -25,18 +22,18 @@ void Player::SetDisks(int disks) {
 
 void Player::SetTokens(int tokens)
 {
-	Player::tokens = &tokens;
+	*Player::tokens = tokens;
 }
 
-void Player::setCountries(int countries)
+/*void Player::setCountries(int countries)
 {
 	*Player::countries = countries;
-}
+}*/
 
-int Player::getCountries() const
+/*int Player::getCountries() const
 {
 	return *countries;
-}
+}*/
 
 int Player::getCubes() const
 {
@@ -68,9 +65,9 @@ std::string Player::getName() const
 Player::~Player()
 {
 	if (name) { delete name; }
-	if (cubes) { delete &cubes; }
-	if (disks) { delete& disks; }
-	if (tokens) { delete& tokens; }
+	if (cubes) { delete cubes; }
+	if (disks) { delete disks; }
+	if (tokens) { delete tokens; }
 	//if (BiddingFacility) { delete &biddingFacility; }
 	if (gameHand) { delete gameHand; }
 }
@@ -93,6 +90,31 @@ Player::Player(std::string name)
 	Player::cubes = new int(18);
 	Player::tokens = new int(4);
 	Player::gameHand = new std::vector<Cards*>();
+}
+
+Player::Player(const Player& copied)
+{
+	Player::name = new std::string("name");
+	Player::disks = new int(3);
+	Player::cubes = new int(18);
+	Player::tokens = new int(4);
+	Player::gameHand = new std::vector<Cards*>();
+	*Player::name = copied.getName();
+	*Player::disks = copied.getDisks();
+	*Player::cubes = copied.getCubes();
+	*Player::tokens = copied.getTokens();
+	*Player::gameHand = *copied.getGameHand();
+
+}
+
+Player& Player::operator=(const Player& copied)
+{
+	*Player::name = copied.getName();
+	*Player::disks = copied.getDisks();
+	*Player::cubes = copied.getCubes();
+	*Player::tokens = copied.getTokens();
+	*Player::gameHand = *copied.getGameHand();
+	return *this;
 }
 
 void Player::PayCoin(int coin)
