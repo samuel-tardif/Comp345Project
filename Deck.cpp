@@ -1,4 +1,6 @@
+#include "Deck.h"
 #include "Cards.h"
+#include "Player.h"
 #include <random>
 
 //List of cards
@@ -53,9 +55,8 @@ Deck::Deck() {
 };
 
 Deck::Deck(int numOfPlayers) {
-    vector<Cards*> deck;
-    int space = 6;
-    int cost = 0;
+    vector<Cards*> *deck = nullptr;
+    int *cost = 0;
 
     createDeck(numOfPlayers);
     shuffleDeck();
@@ -111,8 +112,12 @@ void Deck::createDeck(int numOfPlayers) {
             }
         }
     }
-
+    /*
     for (int i = 0; i < deck.size(); i++) {
+		deck.push_back(ptrCard.at(i));	
+	}
+    */
+    for (int i = 0; i < ptrCard.size(); i++) {
 		deck.push_back(ptrCard.at(i));	
 	}
 };
@@ -127,19 +132,18 @@ Deck::~Deck() {
     if(position){
         delete position;
         position = nullptr;
-    }
-    
+    }    
 }
 
 //Copy constructor (more member need to be added)
-Deck::Deck(const Deck& copied)
+Deck::Deck(const Deck& copied) //removed const before Deck&
 {
 	this->cost = copied.getCost();
     this->position = copied.getPosition();
 }
 
 //Overload the = operator (more member need to be added)
-Deck& Deck::operator=(const Deck& d)
+Deck& Deck::operator=(const Deck& d) //removed const before Deck&
 {
 	cost = d.getCost();
     position = d.getPosition();
@@ -154,6 +158,11 @@ ostream& operator<<(ostream& os, const Deck& deck) {
 }
 
 //Mutators (more member need to be added)
+/*vector<Cards*> Deck::getDeck() const {
+    return this->deck;
+}
+*/
+
 int *Deck::getCost() const {
     return this->cost;
 }
@@ -166,7 +175,6 @@ int *Deck::getPosition() const {
 //Separated draw and shuffle
 //The function that allows you to draw the top card of the deck
 Cards* Deck::draw() {
-
     auto card = deck.back();
     deck.pop_back();
 
@@ -182,12 +190,12 @@ void Deck::shuffleDeck() {
 }
 
 //The function that generates the top board (6 cards)
-std::vector<Cards*> Deck::topBoardGenetor(Deck& deck) {
+std::vector<Cards*>* Deck::topBoardGenetor(Deck& deck) {
     auto tb = new std::vector<Cards*>();
     for (auto i = 0; i < 6; i++) {
         tb->emplace_back(deck.draw());
     }
-    return *tb;
+    return tb;
 }
 
 //The function that displays the 6 cards on the top board.
@@ -208,7 +216,7 @@ void Deck::updateTopBoard(int& position, std::vector<Cards*>& topBoard, Deck& de
     displayTopBoard(topBoard);
 }
 
-void Deck::exchange(Player& player, std::vector<Cards*>& topBoard, Deck& deck) {
+void Deck::exchange(Player* player, std::vector<Cards*>& topBoard, Deck& deck) { //changed Player& player to Player* player
 
     bool successfullPurchase = false;
     int cost = 0, position, index;
@@ -218,7 +226,7 @@ void Deck::exchange(Player& player, std::vector<Cards*>& topBoard, Deck& deck) {
     displayTopBoard(topBoard);
 
     // allow player to purchase a card
-    cout << player.getName() << ", you have " << player.getCoins() << " coins remaining." << endl;
+    cout << player->getNameForOthers() << ", you have " << player->getCoinsForOthers() << " coins remaining." << endl;
     cout << "Which card do you want to buy? Please enter a number from 1 to 6: " << endl;
     do {
         cin >> position;
@@ -238,7 +246,7 @@ void Deck::exchange(Player& player, std::vector<Cards*>& topBoard, Deck& deck) {
         else if (position == 6) {
             cost = 3;
         }
-        successfullPurchase = player.payCoin(cost);
+        successfullPurchase = player->payCoin(cost);
     } while (!successfullPurchase);
 
     // purchase confirmation
@@ -247,17 +255,19 @@ void Deck::exchange(Player& player, std::vector<Cards*>& topBoard, Deck& deck) {
     //vector<Cards*> playerHand = player.getGameHand();
 
     // update gamehand and update top board
-    player.getHand().emplace_back(topBoard.at(index));
+    player->getHand()->printHand();
+    player->getHandContent().push_back(topBoard[index]); //
+    player->getHand()->printHand();
     topBoard.erase(topBoard.begin() + index);
     topBoard.emplace_back(deck.draw());
-    cout << player.getName() << " added [" << player.getHand().back() << "] to their hand." << endl;
+    cout << player->getNameForOthers() << " added [" << *player->getHandContent().back() << "] to their hand." << endl; //
 }
 
 //The function to print the content of the deck
 void Deck::printDeck() {
 	int j = 0;
 	for (auto& i : deck) {
-		cout << "[" << j + 1 << "] " << i << endl;
+		cout << "[" << j + 1 << "] " << *i << endl;
 		j++;
 	}
 }

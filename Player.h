@@ -11,10 +11,12 @@ For COMP 345 -Assignment 1
 #include "Cards.h"
 #include "Map.h"
 #include "BidingFacility.h"
+#include "Hand.h"
 
-
+class Hand;
+class Map;
 class Cards;
-//class BiddingFacility;
+class BidingFacility;
 
 class Player {
 
@@ -35,15 +37,20 @@ public:
 
 	//Default constructor
 	Player();
+	//Player(std::string& name);
 
 	//Parameterized constructor
-	Player(std::string name);
+	Player(string name);
+	Player(const Player& copied);
+	Player& operator = (const Player &p);
 
+
+	//Actions
+	bool payCoin(int cost); 
+	//bool payCoin(Player* p, int cost);
 	Player(const Player& copied);
 	Player& operator=(const Player& copied);
 
-
-	void PayCoin(int coin);
 	void PlaceNewArmies(int placenewarmy);
 	void MoveArmies(int movearmy);
 	void MoveOverLand(int moveoverland);
@@ -65,14 +72,14 @@ public:
 	void SetCubes(int cubes);
 	void SetDisks(int disks);
 	void SetTokens(int tokens);
-
 	void setCountries(int countries);
 	void setCoins(int coins);
-<<<<<<< Updated upstream
+
 	void setBid();
 	void setHand(vector<Cards> v);
-=======
+
 	std::string getNameForOthers() const;
+
 
 	/*
 	Changing this now
@@ -80,17 +87,16 @@ public:
 	void setBid(Player* player);
 
 	void setHand(vector<Cards*>& v);
->>>>>>> Stashed changes
-	//accessors
-	int getCoins();
-	vector<Cards> getHand();
-	void setHand(vector<Cards> v);
 
-	int getCubes() const;
-	int getDisks() const;
-	int getTokens() const;
-	std::string getName() const;
-	int getPlayerID();
+	//accessors
+	int *getCoins() const;
+	Hand *getHand() const;
+	int *getCubes() const;
+	int *getDisks() const;
+	int *getTokens() const;
+	string *getName() const;
+
+
 	//BiddingFacility* getBiddingFacility() const;
 	~Player();
 
@@ -106,16 +112,14 @@ private:
 
 	//BiddingFacility *biddingFacility;
 	
-<<<<<<< Updated upstream
-		
-	
-=======
+
 	vector<Cards*>& getHandContent();
-	
+	std::string getNameForOthers() const;
+
 	int getCubesForOthers() const;
 	int getCoinsForOthers() const;
 
 	vector<Cards*>& getHandSize();
->>>>>>> Stashed changes
+
 
 };
