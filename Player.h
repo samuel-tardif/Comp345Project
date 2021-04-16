@@ -8,17 +8,19 @@ For COMP 345 -Assignment 1
 #include <iostream>
 #include <string>
 #include <vector>
+
 #include "Cards.h"
 #include "Map.h"
 #include "BidingFacility.h"
 #include "Hand.h"
+#include "GameObservers.h"
 
 class Hand;
 class Map;
 class Cards;
 class BidingFacility;
 
-class Player {
+class Player : public Observable {
 
 	private:
 		int *coins;
@@ -74,12 +76,7 @@ public:
 	void SetTokens(int tokens);
 	void setCountries(int countries);
 	void setCoins(int coins);
-
-	void setBid();
-	void setHand(vector<Cards> v);
-
 	std::string getNameForOthers() const;
-
 
 	/*
 	Changing this now
@@ -87,7 +84,6 @@ public:
 	void setBid(Player* player);
 
 	void setHand(vector<Cards*>& v);
-
 	//accessors
 	int *getCoins() const;
 	Hand *getHand() const;
@@ -112,14 +108,11 @@ private:
 
 	//BiddingFacility *biddingFacility;
 	
-
 	vector<Cards*>& getHandContent();
-	std::string getNameForOthers() const;
-
+	
 	int getCubesForOthers() const;
 	int getCoinsForOthers() const;
 
 	vector<Cards*>& getHandSize();
-
 
 };
