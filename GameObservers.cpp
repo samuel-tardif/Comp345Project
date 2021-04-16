@@ -28,57 +28,11 @@ void Observable::Notify() {
 	for (; i != _observers->end(); ++i)
 		(*i)->Update();
 };
-
-//Territory observer implementation----------------------------------------------------------------------------
-
-TerritoryObserver::TerritoryObserver(Map::Territory* s)
-{
-}
-
-TerritoryObserver::~TerritoryObserver()
-{
-}
-
-void TerritoryObserver::Update()
-{
-}
-
-void TerritoryObserver::display()
-{
-}
-
-//Player observer implementation----------------------------------------------------------------------------
-
-PlayerObserver::PlayerObserver(Player* s)
-{
-}
-
-PlayerObserver::~PlayerObserver()
-{
-}
-
-void PlayerObserver::Update()
-{
-}
-
-void PlayerObserver::display()
-{
-}
+/*
 
 
-//Game state observer implementation----------------------------------------------------------------------------
-GameStateObserver::GameStateObserver(GameState* s)
-{
-}
 
-GameStateObserver::~GameStateObserver()
-{
-}
 
-void GameStateObserver::Update()
-{
-}
+*/
 
-void GameStateObserver::display()
-{
-}
+

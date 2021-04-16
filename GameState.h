@@ -4,10 +4,11 @@
 #include "Deck.h"
 #include "Map.h"
 #include "MapLoader.h"
+#include "GameObservers.h"
 
 class Deck;
 
-class GameState {
+class GameState : public Observable {
 
     public:
         int numOfPlayers;

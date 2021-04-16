@@ -14,7 +14,10 @@ For COMP 345 -Assignment 1
 #include <iostream>
 #include <map>
 
-class Map {
+#include "GameObservers.h"
+
+
+class Map  {
 public:
 	
 
@@ -44,8 +47,7 @@ public:
 	void changeContinent(int index, int owner);
 
 
-
-	class Territory {
+	class Territory : public Observable {
 
 		
 	public:
