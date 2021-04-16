@@ -44,10 +44,22 @@ public:
 	Player(const Player& copied);
 	Player& operator = (const Player &p);
 
+
 	//Actions
 	bool payCoin(int cost); 
 	//bool payCoin(Player* p, int cost);
+	Player(const Player& copied);
+	Player& operator=(const Player& copied);
 
+	void PlaceNewArmies(int placenewarmy);
+	void MoveArmies(int movearmy);
+	void MoveOverLand(int moveoverland);
+	void BuildCity(int buildcity);
+	void DestroyArmy(int destroyarmy);
+
+
+	//Actions
+	bool payCoin(int cost);
 	void placeNewArmies(Map m, int numArmies, int index, int player);
 	void MoveArmies(int nbarmy, Map &start, Map &stop);
 	void MoveOverLand(int nbarmies, Map& start, Map& stop);
@@ -80,6 +92,19 @@ public:
 
 	//BiddingFacility* getBiddingFacility() const;
 	~Player();
+
+	
+
+
+private:
+	
+	int *cubes;
+	int *disks;
+	int *tokens;
+	//int* countries;
+	std::string* name;
+	std::vector<Cards*>* gameHand;
+
 	//BiddingFacility *biddingFacility;
 	
 	vector<Cards*>& getHandContent();

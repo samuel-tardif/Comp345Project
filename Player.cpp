@@ -4,7 +4,13 @@ ID: 40111703
 Date : 21/02/2021
 For COMP 345 -Assignment 1
 ------------------------------------------------------------------------------------------------*/
+
+#pragma once
 #include "Player.h"
+
+#include "BidingFacility.h"
+#include "Map.h"
+
 
 Player::Player()
 {
@@ -15,6 +21,38 @@ Player::Player()
 	this->tokens = nullptr;
 	this->hand = nullptr; //Object of Hand class
 }
+//copy constructors
+Player::Player(const Player& copied)
+{
+	Player::name = new std::string("name");
+	Player::disks = new int(3);
+	Player::cubes = new int(18);
+	Player::tokens = new int(4);
+	Player::gameHand = new std::vector<Cards*>();
+	*Player::name = copied.getName();
+	*Player::disks = copied.getDisks();
+	*Player::cubes = copied.getCubes();
+	*Player::tokens = copied.getTokens();
+	*Player::gameHand = *copied.getGameHand();
+
+
+}
+
+Player& Player::operator=(const Player& copied)
+{
+	*Player::name = copied.getName();
+	*Player::disks = copied.getDisks();
+	*Player::cubes = copied.getCubes();
+	*Player::tokens = copied.getTokens();
+	*Player::gameHand = *copied.getGameHand();
+	return *this;
+}
+
+/*void Player::setBid() {
+	BidingFacility playerBid = new BidingFacility();
+	playerBid->setBid(*playerID);
+}*/
+
 
 Player::Player(std::string name)
 {
@@ -71,8 +109,20 @@ void Player::SetDisks(int disks) {
 
 void Player::SetTokens(int tokens)
 {
-	Player::tokens = &tokens;
+	*Player::tokens = tokens;
 }
+
+
+/*void Player::setCountries(int countries)
+{
+	*Player::countries = countries;
+}*/
+
+
+/*int Player::getCountries() const
+{
+	return *countries;
+}*/
 
 //Added by Bumsu David Park
 
@@ -85,6 +135,7 @@ int *Player::getCubes() const
 {
 	return this->cubes;
 }
+
 
 int *Player::getDisks() const
 {
@@ -111,14 +162,26 @@ int Player::getCubesForOthers() const
 	return *cubes;
 }
 
+//Accessors for player ID and birthday
+int Player::getPlayerID() {
+	return *playerID;
+}
+
 int Player::getCoinsForOthers() const {
 	return *coins;
 }
+
 
 int *Player::getCoins() const
 {
 	return this->coins;
 }
+
+/*BiddingFacility* Player::getBiddingFacility() const
+{
+	return BiddingFacility;
+}*/
+
 
 //Destructors
 Player::~Player()
@@ -129,6 +192,7 @@ Player::~Player()
 	if (tokens) { delete tokens; }
 	if (coins) {delete coins; }
 	if (hand) {delete hand; }
+
 	//if (BiddingFacility) { delete &biddingFacility; }
 }
 
@@ -143,6 +207,32 @@ Player::Player(string name)
 	Player::hand = new Hand();
 }
 */
+
+
+Player::Player(const Player& copied)
+{
+	Player::name = new std::string("name");
+	Player::disks = new int(3);
+	Player::cubes = new int(18);
+	Player::tokens = new int(4);
+	Player::gameHand = new std::vector<Cards*>();
+	*Player::name = copied.getName();
+	*Player::disks = copied.getDisks();
+	*Player::cubes = copied.getCubes();
+	*Player::tokens = copied.getTokens();
+	*Player::gameHand = *copied.getGameHand();
+
+}
+
+Player& Player::operator=(const Player& copied)
+{
+	*Player::name = copied.getName();
+	*Player::disks = copied.getDisks();
+	*Player::cubes = copied.getCubes();
+	*Player::tokens = copied.getTokens();
+	*Player::gameHand = *copied.getGameHand();
+	return *this;
+}
 
 bool Player::payCoin(int cost)
 {
@@ -160,20 +250,21 @@ bool Player::payCoin(int cost)
 //Actions
 void Player::placeNewArmies(Map m, int numArmies, int index, int player) {
 
-	cout << "Good until 2.4" << endl;
-	//Check army availability. Can't place an army if theyre all already deployed
+  cout << "Good until 2.4" << endl;
+
+//Check army availability. Can't place an army if theyre all already deployed
 
 	if ((*cubes - numArmies) >= 0) {
 		cout << "Good until 2.5" << endl;
 		*cubes - numArmies;
 		m.changeNumberArmies(index, numArmies, player + 1); //0, 4, 0
-
 	}
 	else {
 		//If the player has too few armies
 		cerr << "\nOperation blocked. You only have " << *cubes << " armies available to you.";
 	}
 }
+
 
 /*
 void Player::MoveArmies(int nbarmy, Map& start, Map& stop)
@@ -190,14 +281,16 @@ void Player::MoveArmies(int nbarmy, Map& start, Map& stop)
 
 	std::cout << "moves army" << std::endl;
 }
+
 */
 /*
+
+
 void Player::MoveOverLand(int nbarmies, Map& start, Map& stop)
 {
 	
 	MoveArmies(nbarmies, start, stop);
 	std::cout << "moves over land" << std::endl;
-
 }
 */
 void Player::BuildCity(Map& cityplace)
@@ -209,9 +302,8 @@ void Player::BuildCity(Map& cityplace)
 		SetDisks( *disks - 1);
 		std::cout << "builds city" << std::endl;
 	}
-
-
 }
+
 
 /*
 void Player::DestroyArmy(Map& armyplace, Player& armyowner)
@@ -224,8 +316,10 @@ void Player::DestroyArmy(Map& armyplace, Player& armyowner)
 }
 */
 
+
 void Player::setBid(Player* player) {
 	playerBid = new BidingFacility(player);
+
 	playerBid->makeBid();
 }
 
