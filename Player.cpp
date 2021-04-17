@@ -321,7 +321,11 @@ void Player::DestroyArmy(Map& armyplace, Player& armyowner)
 }
 */
 
+int Player::andOrAction(int action)
+{
+	return action;
 
+}
 void Player::setBid(Player* player) {
 	playerBid = new BidingFacility(player);
 
