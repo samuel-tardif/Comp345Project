@@ -72,7 +72,7 @@ Player* BidingFacility::getOwner() const
 }
 
 //This is what determines who won the bids
-Player* BidingFacility::resolveBids(vector<Player*> players)
+Player* BidingFacility::resolveBids()
 {
 	Player* winner = new Player("Winner");
 	int maxBid = 0;
