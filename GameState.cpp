@@ -8,8 +8,6 @@ GameState::GameState(bool tournament) {
 
     while (!validMap)
     {
-        try
-        {
         // load map
         MapLoader loader;
 
@@ -28,21 +26,12 @@ GameState::GameState(bool tournament) {
         }
 
         validMap = true;
-        }
-
-        catch (const char *msg)
-        {
-            std::cout << "Error: Invalid map file. ";
-            std::cout << msg << std::endl;
-        }
     }
-
     int numOfPlayers;
-
     //Obtain the number of players who will be playing this game.
     std::cout << "How many people are playing (2~4)? : ";
     std::cin >> numOfPlayers;
-    
+
     while (numOfPlayers < 2 || numOfPlayers > 4)
     {   
         cin.clear();
@@ -87,63 +76,78 @@ GameState::GameState(bool tournament) {
         players->push_back(p);
         
         //Had segmentation fault here because p->getname was pointing to a nullpointer
-        std::cout << p->getNameForOthers() << " is ready, and has " << p->getCoinsForOthers() << " coins." << std::endl << std::endl;
+        std::cout << p->getName() << " is ready, and has " << p->getCoins() << " coins." << std::endl << std::endl;
+        //SEGMENTATION FAULT? CAN'T FIND NAME AND COINS? BUT THERE ARE THERE IN LINE 76...
     }
 
+    //MIGHT NEED TO BE IN ANOTHER FILE
     //Create 2 player deck during tournament mode
-    int deckByBNumOfPlayers = numOfPlayers;
+    int deckByNumOfPlayers = numOfPlayers;
     if (tournament) {
-        deckByBNumOfPlayers = 2;
+        deckByNumOfPlayers = 2;
     }
 
     //Create different deck depending on the number of players
     //The deck is shuffled when it is created.
     cout << "==Creating the deck==" << endl << endl;
-    Deck *deck = new Deck(deckByBNumOfPlayers);
-//==============================================================================================
-    cout << "==Your hands==" << endl;
-    //Create empty hands
-    for (int i = 0; i < numOfPlayers; i++) {
-		cout << players->at(i)->getNameForOthers() << ": ";
-		players->at(i)->initializeHand(); //giving each player an empty hand with 0 cards
-		players->at(i)->printHand(); //Displaying the hand. Shouldn't print anything
-	}
-	cout << endl;
+    Deck *deck = new Deck(deckByNumOfPlayers);
+}
 
-	//The same for both game mode
-    cout << "==Generating the topboard==" << endl;
-    //Draw 6 cards (top board)
-    vector<Cards*> *topboard = deck->topBoardGenetor(*deck);
-    deck->displayTopBoard(*topboard);
-
-    //Bidding
-    //Obtain the bidding coins of each player.
-    cout << endl;
-    cout << "==Bidding==" << endl;
-    for (int i = 0; i < numOfPlayers; i++) {
-        cin.clear();
-        cin.ignore();
-        players->at(i)->setBid(players->at(i));
+GameState::~GameState() {
+    if (map)
+    {
+        delete map;
+        map = NULL;
     }
-
-    cout << endl;
-    cout << "==Order==" << endl;
-    BidingFacility calculator = BidingFacility();
-    
-    //Decides which player (e.g. 1 or 2 goes first depending on the amount of coins)
-    Player* winner = calculator.resolveBids(*players);
-
-    std::cout << winner->getNameForOthers() << " goes first." << std::endl;
-
-    //the winner goes first 
-    int playerOrder = 0;
-
-    for (auto it = players->begin(); it != players->end(); ++it) {
-        if (players->at(playerOrder)->getName() == winner->getName()) {
-            auto first = *it;
-            players->erase(it);
-            players->insert(players->begin(), first /* or std::move(first)*/) ;
-            break;
-        }
+    if (players)
+    {
+        delete players;
+        players = NULL;
     }
+    if (deck)
+    {
+        delete deck;
+        deck = NULL;
+    }
+}
+
+int* GameState::getNumOfPlayers() {
+    return numOfPlayers;
+}
+
+Map* GameState::getMap() {
+    return map;
+}
+
+Deck* GameState::getDeck() {
+    return deck;
+}
+
+vector<Cards*>* GameState::getTopboard() {
+    return topboard;
+}
+
+vector<Player*>* GameState::getPlayers() {
+    return players;
+}
+
+//MUTATORS
+void GameState::setNumOfPlayers(int nop) {
+    *numOfPlayers = nop;
+}
+
+void GameState::setMap(Map m) {
+    *map = m;
+}
+
+void GameState::setDeck(Deck d) {
+    *deck = d;
+}
+
+void GameState::setTopboard(vector<Cards*> tb) {
+    *topboard = tb;
+}
+
+void GameState::setPlayers(vector<Player*> p) {
+    *players = p;
 }

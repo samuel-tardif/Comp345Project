@@ -157,12 +157,6 @@ ostream& operator<<(ostream& os, const Deck& deck) {
     return os;
 }
 
-//Mutators (more member need to be added)
-/*vector<Cards*> Deck::getDeck() const {
-    return this->deck;
-}
-*/
-
 int *Deck::getCost() const {
     return this->cost;
 }
@@ -255,9 +249,7 @@ void Deck::exchange(Player* player, std::vector<Cards*>& topBoard, Deck& deck) {
     //vector<Cards*> playerHand = player.getGameHand();
 
     // update gamehand and update top board
-    player->getHand()->printHand();
-    player->getHandContent().push_back(topBoard[index]); //
-    player->getHand()->printHand();
+    player->getHandContent().push_back(topBoard[index]);
     topBoard.erase(topBoard.begin() + index);
     topBoard.emplace_back(deck.draw());
     cout << player->getNameForOthers() << " added [" << *player->getHandContent().back() << "] to their hand." << endl; //

@@ -41,7 +41,7 @@ public:
 	string* getFileName() const;
 	Map* getMap() const;
 	void setMap(Map);
-	void setFileName(std::string);
+	void setFileName(string);
 
 	//method to generate map
 	void GenerateMap();

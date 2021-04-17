@@ -88,7 +88,7 @@ Player* BidingFacility::resolveBids(vector<Player*> players)
 			}
 		}
 	}
-	cout << "The winner is : " << winner->getNameForOthers() << endl;
+	cout << "The winner of the bid is : " << winner->getNameForOthers() << endl;
 	winner->payCoin(maxBid); //Segmentation fault in Player payCoin / getCoin function
 	//This is because the winner (Player object) is a newly created Player object and has the coin member as nullptr.
 	//Seems to be bidingfacility's problem (maybe with map?)

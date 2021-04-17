@@ -4,11 +4,8 @@ ID: 40051573
 Date : 228/03/2021
 For COMP 345 -Assignment 2
 ------------------------------------------------------------------------------------------------*/
-
-#pragma once
 //Code for part 6, computeScore
 #include "ComputeScore.h"
-#include "Hand.h"
 
 //Default constructor
 ComputeScore::ComputeScore()
@@ -88,8 +85,8 @@ Player* ComputeScore::determineWinner()
 
 	//Check points from game hand
 	//Retrieving game hands
-	Hand p1GameHand = *player1->getHand();
-	Hand p2GameHand = *player2->getHand();
+	std::vector<Cards*> p1GameHand = player1->getHandContent();
+	std::vector<Cards*> p2GameHand = player2->getHandContent();
 
 	//Setting up lixirs totals
 	int* p1Elixirs = new int(0);
@@ -151,29 +148,27 @@ Player* ComputeScore::determineWinner()
 			cout << " Player 2 wins with more gold" << endl << endl;
 		}
 		//Equality next tie breaker
-		if (player1->getTokens() == player2->getTokens()) {
-			if (player1->getTokens() < player2->getTokens()) {
-				cout << " Both players have as much gold" << endl << endl;
-				//Gold tie breaker
-				if (*player1TotalArmies > *player2TotalArmies) {
-					cout << " Player 1 wins with more armies" << endl << endl;
+		if (player1->getTokens() < player2->getTokens()) {
+			cout << " Both players have as much gold" << endl << endl;
+			//Gold tie breaker
+			if (*player1TotalArmies > *player2TotalArmies) {
+				cout << " Player 1 wins with more armies" << endl << endl;
+			}
+			if (*player1TotalArmies < *player2TotalArmies) {
+				cout << " Player 2 wins with more armies" << endl << endl;
+			}
+			//Equality next tie breaker
+			if (*player1TotalArmies == *player2TotalArmies) {
+				cout << " Both players have just as many armies" << endl << endl;
+				//Territories tie breaker
+				if (*player1Territories > *player2Territories) {
+					cout << " Player 1 wins with more territories" << endl << endl;
 				}
-				if (*player1TotalArmies < *player2TotalArmies) {
-					cout << " Player 2 wins with more armies" << endl << endl;
+				if (*player1Territories < *player2Territories) {
+					cout << " Player 2 wins with more territories" << endl << endl;
 				}
-				//Equality next tie breaker
-				if (*player1TotalArmies == *player2TotalArmies) {
-					cout << " Both players have just as many armies" << endl << endl;
-					//Territories tie breaker
-					if (*player1Territories > *player2Territories) {
-						cout << " Player 1 wins with more territories" << endl << endl;
-					}
-					if (*player1Territories < *player2Territories) {
-						cout << " Player 2 wins with more territories" << endl << endl;
-					}
-					if (*player1Territories == *player2Territories) {
-						cout << " IT'S A DRAW!!!" << endl << endl;
-					}
+				if (*player1Territories == *player2Territories) {
+					cout << " IT'S A DRAW!!!" << endl << endl;
 				}
 			}
 		}
@@ -186,13 +181,13 @@ Player* ComputeScore::determineWinner()
 }
 
 //Method to dertermine how many points our hand is worth
-void ComputeScore::tallyGameHand(Hand GameHand, int* playerCardScore, int* playerElixir, Player* player) {
+void ComputeScore::tallyGameHand(std::vector<Cards*> GameHand, int* playerCardScore, int* playerElixir, Player* player) {
 	//Loop throughh game hand
-	for (int i = 0; i < GameHand.getHand().size(); i++) {
+	for (int i = 0; i < GameHand.size(); i++) {
 		//Check what cards we have
 		
-		string name = *GameHand.getHand().at(i)->getName();
-		string ability = *GameHand.getHand().at(i)->getAbility();
+		string name = *GameHand.at(i)->getName();
+		string ability = *GameHand.at(i)->getAbility();
 		
 		//Check for elixirs
 		std::size_t found = name.find("ELIXIR");
@@ -218,10 +213,10 @@ void ComputeScore::tallyGameHand(Hand GameHand, int* playerCardScore, int* playe
 		found = name.find("Ancient Sage");
 		if (found != std::string::npos) {
 			//For ancient sage and allll similar cards, we need to iterate throuhg hand to find matches
-			for (int j = 0; j < GameHand.getHand().size(); j++) {
+			for (int j = 0; j < GameHand.size(); j++) {
 				//Rechecking cards
-				name = *GameHand.getHand().at(j)->getName();
-				ability = *GameHand.getHand().at(j)->getAbility();
+				name = *GameHand.at(j)->getName();
+				ability = *GameHand.at(j)->getAbility();
 				//Checking for ancient in name
 				found = name.find("Ancient");
 				if (found != std::string::npos) {
@@ -234,10 +229,10 @@ void ComputeScore::tallyGameHand(Hand GameHand, int* playerCardScore, int* playe
 		found = name.find("Cursed Tower");
 		if (found != std::string::npos) {
 			//For ancient sage and allll similar cards, we need to iterate throuhg hand to find matches
-			for (int j = 0; j < GameHand.getHand().size(); j++) {
+			for (int j = 0; j < GameHand.size(); j++) {
 				//Rechecking cards
-				name = *GameHand.getHand().at(j)->getName();
-				ability = *GameHand.getHand().at(j)->getAbility();
+				name = *GameHand.at(j)->getName();
+				ability = *GameHand.at(j)->getAbility();
 				//Checking for Fllying ability
 				found = ability.find("FLYING");
 				if (found != std::string::npos) {
@@ -257,10 +252,10 @@ void ComputeScore::tallyGameHand(Hand GameHand, int* playerCardScore, int* playe
 		found = name.find("Graveyard");
 		if (found != std::string::npos) {
 			//For ancient sage and allll similar cards, we need to iterate throuhg hand to find matches
-			for (int j = 0; j < GameHand.getHand().size(); j++) {
+			for (int j = 0; j < GameHand.size(); j++) {
 				//Rechecking cards
-				name = *GameHand.getHand().at(j)->getName();
-				ability = *GameHand.getHand().at(j)->getAbility();
+				name = *GameHand.at(j)->getName();
+				ability = *GameHand.at(j)->getAbility();
 				//Checking for cursed in name
 				found = name.find("Cursed");
 				if (found != std::string::npos) {
@@ -273,10 +268,10 @@ void ComputeScore::tallyGameHand(Hand GameHand, int* playerCardScore, int* playe
 		found = name.find("Lake");
 		if (found != std::string::npos) {
 			//For ancient sage and allll similar cards, we need to iterate throuhg hand to find matches
-			for (int j = 0; j < GameHand.getHand().size(); j++) {
+			for (int j = 0; j < GameHand.size(); j++) {
 				//Rechecking cards
-				name = *GameHand.getHand().at(j)->getName();
-				ability = *GameHand.getHand().at(j)->getAbility();
+				name = *GameHand.at(j)->getName();
+				ability = *GameHand.at(j)->getAbility();
 				//Checking for forest in name
 				found = name.find("Forest");
 				if (found != std::string::npos) {
@@ -289,10 +284,10 @@ void ComputeScore::tallyGameHand(Hand GameHand, int* playerCardScore, int* playe
 		found = name.find("Night Wizard");
 		if (found != std::string::npos) {
 			//For ancient sage and allll similar cards, we need to iterate throuhg hand to find matches
-			for (int j = 0; j < GameHand.getHand().size(); j++) {
+			for (int j = 0; j < GameHand.size(); j++) {
 				//Rechecking cards
-				name = *GameHand.getHand().at(j)->getName();
-				ability = *GameHand.getHand().at(j)->getAbility();
+				name = *GameHand.at(j)->getName();
+				ability = *GameHand.at(j)->getAbility();
 				//Checking for night in name
 				found = name.find("Night");
 				if (found != std::string::npos) {
@@ -306,10 +301,10 @@ void ComputeScore::tallyGameHand(Hand GameHand, int* playerCardScore, int* playe
 		if (found != std::string::npos) {
 			//For this one we need to count noblle cards
 			int totalNoble = 0;
-			for (int j = 0; j < GameHand.getHand().size(); j++) {
+			for (int j = 0; j < GameHand.size(); j++) {
 				//Rechecking cards
-				name = *GameHand.getHand().at(j)->getName();
-				ability = *GameHand.getHand().at(j)->getAbility();
+				name = *GameHand.at(j)->getName();
+				ability = *GameHand.at(j)->getAbility();
 				//Checking for noble in name
 				found = name.find("Night");
 				if (found != std::string::npos) {
@@ -326,10 +321,10 @@ void ComputeScore::tallyGameHand(Hand GameHand, int* playerCardScore, int* playe
 		found = name.find("Stronghold");
 		if (found != std::string::npos) {
 			//For ancient sage and allll similar cards, we need to iterate throuhg hand to find matches
-			for (int j = 0; j < GameHand.getHand().size(); j++) {
+			for (int j = 0; j < GameHand.size(); j++) {
 				//Rechecking cards
-				name = *GameHand.getHand().at(j)->getName();
-				ability = *GameHand.getHand().at(j)->getAbility();
+				name = *GameHand.at(j)->getName();
+				ability = *GameHand.at(j)->getAbility();
 				//Checking for dire in name
 				found = name.find("Dire");
 				if (found != std::string::npos) {
@@ -342,10 +337,10 @@ void ComputeScore::tallyGameHand(Hand GameHand, int* playerCardScore, int* playe
 		found = name.find("Stronghold");
 		if (found != std::string::npos) {
 			//For ancient sage and allll similar cards, we need to iterate throuhg hand to find matches
-			for (int j = 0; j < GameHand.getHand().size(); j++) {
+			for (int j = 0; j < GameHand.size(); j++) {
 				//Rechecking cards
-				name = *GameHand.getHand().at(j)->getName();
-				ability = *GameHand.getHand().at(j)->getAbility();
+				name = *GameHand.at(j)->getName();
+				ability = *GameHand.at(j)->getAbility();
 				//Checking for Arcane in name
 				found = name.find("Arcane");
 				if (found != std::string::npos) {
@@ -359,10 +354,10 @@ void ComputeScore::tallyGameHand(Hand GameHand, int* playerCardScore, int* playe
 		if (found != std::string::npos) {
 			//For this one we need to count Mountain cards
 			int totalMountain = 0;
-			for (int j = 0; j < GameHand.getHand().size(); j++) {
+			for (int j = 0; j < GameHand.size(); j++) {
 				//Rechecking cards
-				name = *GameHand.getHand().at(j)->getName();
-				ability = *GameHand.getHand().at(j)->getAbility();
+				name = *GameHand.at(j)->getName();
+				ability = *GameHand.at(j)->getAbility();
 				//Checking for Mountain in name
 				found = name.find("Mountain");
 				if (found != std::string::npos) {

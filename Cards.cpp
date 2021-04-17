@@ -1,9 +1,4 @@
 #include "Cards.h"
-#include "Player.h"
-#include <ctime>
-#include <random>
-#include <algorithm>
-#include <iostream>
 
 Cards::Cards() {
     this->name = nullptr;

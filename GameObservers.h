@@ -27,12 +27,3 @@ public:
 private:
 	list<Observer*>* _observers;
 };
-
-/*
-
-
-
-*/
-
-
-

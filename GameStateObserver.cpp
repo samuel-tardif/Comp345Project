@@ -1,7 +1,5 @@
-#pragma once
-
 #include "GameStateObserver.h"
-
+/*
 //Game state observer implementation----------------------------------------------------------------------------
 GameStateObserver::GameStateObserver(GameState* s)
 {
@@ -14,7 +12,7 @@ GameStateObserver::~GameStateObserver()
 {
 	_subject->Detach(this);
 }
-
+*/
 void GameStateObserver::Update()
 {
 	display();

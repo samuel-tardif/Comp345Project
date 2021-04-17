@@ -1,8 +1,7 @@
-#pragma once
 #include "TerritoryObserver.h"
 
 //Territory observer implementation----------------------------------------------------------------------------
-
+/*
 TerritoryObserver::TerritoryObserver(Map::Territory* s)
 {
 	//Upon instantiation, attaches itself
@@ -14,7 +13,7 @@ TerritoryObserver::~TerritoryObserver()
 {
 	_subject->Detach(this);
 }
-
+*/
 void TerritoryObserver::Update()
 {
 	display();

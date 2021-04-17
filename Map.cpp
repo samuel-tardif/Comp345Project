@@ -14,8 +14,6 @@ using std::cout;
 using std::cin;
 using std::endl;
 using std::vector;
-
-
 //Default constructor
 Map::Map()
 {
@@ -280,7 +278,6 @@ void Map::changeNumberArmies(int index, int nbArmies, int player) //0, 4, 1
 		cout << "Good until here 2.7.2.2" << endl;
 	}
 	cout << "Territory " << index << " now has " << nbArmies << " armies" << endl;
-
 }
 
 
@@ -335,19 +332,16 @@ int Map::Territory::getContinent() const
 void Map::Territory::setOwner(int newOwner)
 {
 	*owner = newOwner;
-	this->Notify();
 }
 
 //Standard setter
 void Map::Territory::setNbArmies1(int newNbArmies)
 {
 	*nbArmies1 = newNbArmies;
-	this->Notify();
 }
 void Map::Territory::setNbArmies2(int newNbArmies)
 {
 	*nbArmies2 = newNbArmies;
-	this->Notify();
 }
 
 //Standard setter

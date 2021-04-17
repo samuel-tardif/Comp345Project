@@ -1,10 +1,8 @@
-#pragma once
-
 #include "HandObserver.h"
 #include "Hand.h"
 
 //Player observer implementation----------------------------------------------------------------------------
-
+/*
 HandObserver::HandObserver(Hand* s)
 {
 	//Upon instantiation, attaches itself
@@ -16,6 +14,7 @@ HandObserver::~HandObserver()
 {
 	_subject->Detach(this);
 }
+*/
 
 void HandObserver::Update()
 {

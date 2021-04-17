@@ -28,11 +28,3 @@ void Observable::Notify() {
 	for (; i != _observers->end(); ++i)
 		(*i)->Update();
 };
-/*
-
-
-
-
-*/
-
-

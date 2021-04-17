@@ -7,11 +7,9 @@ For COMP 345 -Assignment 2
 
 #pragma once
 //Code for part 6, computeScore
-
-
 //Includes
 #include <iostream>
-#include "Hand.h"
+#include <conio.h>
 #include "Player.h"
 #include "Cards.h"
 #include "Map.h"
@@ -44,7 +42,7 @@ public:
 	//Computes the scores and determines the winner
 	Player* determineWinner();
 
-	void tallyGameHand(Hand p1GameHand, int* player1CardScore, int* playerElixir, Player* player);
+	void tallyGameHand(std::vector<Cards*> p1GameHand, int* player1CardScore, int* playerElixir, Player* player);
 
 	void tallyContinent(int contIndex, int* player1Continent, int* player2Continent, int* player1Territories, int* player2Territories, int* player1TotalArmies, int* player2TotalArmies);
 
