@@ -23,4 +23,7 @@ void GameStateObserver::Update()
 void GameStateObserver::display()
 {
 	cout << "display GameState with observer" << endl;
+	cout << "********************************************************************************************" << endl;
+	cout << "Player turn : " << "Replace with current player" << endl;
+	cout << "********************************************************************************************" << endl;
 }
