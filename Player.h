@@ -69,6 +69,7 @@ public:
 	void DestroyArmy(Map &armyplace, Player& armyowner);
 	void initializeHand();
 	void printHand();
+	int andOrAction(int action);
 	//mutators
 	void setName(std::string name);
 	void SetCubes(int cubes);
