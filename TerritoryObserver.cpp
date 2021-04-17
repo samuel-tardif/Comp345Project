@@ -22,5 +22,6 @@ void TerritoryObserver::Update()
 
 void TerritoryObserver::display()
 {
-	cout << "display Territory through observer" << endl;
+	cout << "The territory has been updated as follows :" << endl;
+	cout << *_subject << endl;
 }
