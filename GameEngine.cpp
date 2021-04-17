@@ -1,5 +1,5 @@
 #include "GameEngine.h"
-#include "GameState.h"
+//#include "GameState.h"
 #include "ComputeScore.h"
 
 class Player;
@@ -40,31 +40,87 @@ bool GameEngine::selectGameMode() {
 
 void GameEngine::singleGameMode() {
 
-    GameState state = GameState(false);
+    //GameState state = GameState(false);
+
+    int numOfPlayers;
+
+    int initialCoins;
+
+    vector<Player*> players;
+
+    Map m;
+
+    //Obtain the number of players who will be playing this game.
+    std::cout << "How many people are playing (2~4)? : ";
+    std::cin >> numOfPlayers;
+    
+    while (numOfPlayers < 2 || numOfPlayers > 4)
+    {   
+        cin.clear();
+        cin.ignore();
+        std::cout << "Invalid player count, please select a number between 2 and 4: ";
+        std::cin >> numOfPlayers;
+    }
+    
+    //Decide how many coins each player will have.
+    switch (numOfPlayers) {
+	case 2:
+		initialCoins = 14;
+		break;
+	case 3:
+		initialCoins = 11;
+		break;
+	case 4:
+		initialCoins = 9;
+		break;
+	}
+    
+    //Create players
+    for (int i = 0; i < numOfPlayers; i++) {
+        //Maybe ask the names?
+        string name;
+        cout << "Enter the your player name: ";
+        getline(cin, name) >> name;
+        Player* p = new Player(name); //I'm inside a for loop, as soon as I get out of for loop it disappears so I need to make it into pointer.
+        
+        //Give coins to each player.
+        p->setCoins(initialCoins);
+
+        //Put the "player" in the vector of players
+        players.push_back(p);
+        
+        //Had segmentation fault here because p->getname was pointing to a nullpointer
+        std::cout << p->getNameForOthers() << " is ready, and has " << p->getCoinsForOthers() << " coins." << std::endl << std::endl;
+    }
+
+    //Create different deck depending on the number of players
+    //The deck is shuffled when it is created.
+    cout << "==Creating the deck==" << endl << endl;
+    Deck deck = Deck(numOfPlayers);
 
     std::cout << "==Your hands==" << endl;
     //Create empty hands
-    for (int i = 0; i < *(state.getNumOfPlayers()); i++) {
-		std::cout << state.getPlayers()->at(i)->getNameForOthers() << ": ";
-		state.getPlayers()->at(i)->initializeHand(); //giving each player an empty hand with 0 cards
-		state.getPlayers()->at(i)->printHand(); //Displaying the hand. Shouldn't print anything
+    for (int i = 0; i < numOfPlayers; i++) {
+		std::cout << players[i]->getNameForOthers() << ": ";
+		players[i]->initializeHand(); //giving each player an empty hand with 0 cards
+		players[i]->printHand(); //Displaying the hand. Shouldn't print anything
 	}
 	std::cout << endl;
 
     //The same for both game mode
     std::cout << "==Generating the topboard==" << endl;
     //Draw 6 cards (top board)
-    vector<Cards*> *topboard = state.getDeck()->topBoardGenetor(*(state.getDeck()));
-    state.getDeck()->displayTopBoard(*topboard);
+    vector<Cards*> *topboard = deck.topBoardGenetor(deck);
+    deck.displayTopBoard(*topboard);
 
     //Bidding
     //Obtain the bidding coins of each player.
     std::cout << endl;
     std::cout << "==Bidding==" << endl;
-    for (int i = 0; i < *(state.getNumOfPlayers()); i++) {
+    for (int i = 0; i < numOfPlayers; i++) {
         cin.clear();
         cin.ignore();
-        state.getPlayers()->at(i)->setBid(state.getPlayers()->at(i));
+        players[i]->setBid(players[i]);
     }
 
     std::cout << endl;
@@ -79,11 +135,11 @@ void GameEngine::singleGameMode() {
     //the winner goes first 
     int playerOrder = 0;
 
-    for (auto it = state.getPlayers()->begin(); it != state.getPlayers()->end(); ++it) {
-        if (state.getPlayers()->at(playerOrder)->getName() == winner->getName()) {
+    for (auto it = players.begin(); it != players.end(); ++it) {
+        if (players[playerOrder]->getName() == winner->getName()) {
             auto first = *it;
-            state.getPlayers()->erase(it);
-            state.getPlayers()->insert(state.getPlayers()->begin(), first /* or std::move(first)*/) ;
+            players.erase(it);
+            players.insert(players.begin(), first /* or std::move(first)*/) ;
             break;
         }
     }
@@ -94,18 +150,18 @@ void GameEngine::singleGameMode() {
     bool continueTheGame = false;
     do {
         //This decides whose turn it is.
-        std::cout << "It is currently " << state.getPlayers()->at(indexOfPlayers)->getNameForOthers() << "'s turn to play." << std::endl;
+        std::cout << "It is currently " << players[indexOfPlayers]->getNameForOthers() << "'s turn to play." << std::endl;
         
         //Buy
-        state.getDeck()->exchange(state.getPlayers()->at(indexOfPlayers), *(state.getTopboard()), *(state.getDeck())); //You have to dereference because you are taking a reference to a player.
+        deck.exchange(players[indexOfPlayers], *topboard, deck); //You have to dereference because you are taking a reference to a player.
 
         indexOfPlayers++;
         indexOfPlayers %= 2;
         //Had to place indexOfPlayer%2 after indexOfPlayer++
 
         //Check if every single player has 11 cards in their hand
-        for (int eachPlayer = 0; eachPlayer < *(state.getNumOfPlayers()); eachPlayer++) {
-            if (state.getPlayers()->at(indexOfPlayers)->getHandContent().size() < 11) {
+        for (int eachPlayer = 0; eachPlayer < numOfPlayers; eachPlayer++) {
+            if (players[indexOfPlayers]->getHandContent().size() < 11) {
                 continueTheGame = true;
             }
             else {
@@ -122,16 +178,84 @@ void GameEngine::singleGameMode() {
 };
 
 void GameEngine::tournamentMode() {
-
+    std::cout << "TOURNAMENT MODE" << endl;
     //Validate map
-    GameState state = GameState(true);
+    //GameState state = GameState(true);
+    bool validMap = false;
+
+    while (!validMap)
+    {
+        // load map
+        MapLoader loader;
+
+        // get file location
+        std::string fileLocation;
+        std::cout << "Enter map file location: ";
+        std::cin >> fileLocation;
+        loader.setFileName(fileLocation);
+        loader.GenerateMap();
+
+        validMap = true;
+    }
 
     //The number of turns in each game
     int gamenLength = 20; 
 //======================================== TOURNAMENT MODE MAIN LOOP ========================================
+    int numOfPlayers;
 
+    int initialCoins;
+
+    vector<Player*> players;
+
+    Map m;
+
+    //Obtain the number of players who will be playing this game.
+    std::cout << "How many people are playing (2~4)? : ";
+    std::cin >> numOfPlayers;
+    
+    while (numOfPlayers < 2 || numOfPlayers > 4)
+    {   
+        cin.clear();
+        cin.ignore();
+        std::cout << "Invalid player count, please select a number between 2 and 4: ";
+        std::cin >> numOfPlayers;
+    }
+    
+    //Decide how many coins each player will have.
+    switch (numOfPlayers) {
+	case 2:
+		initialCoins = 14;
+		break;
+	case 3:
+		initialCoins = 11;
+		break;
+	case 4:
+		initialCoins = 9;
+		break;
+	}
+    
+    //Create players
+    for (int i = 0; i < numOfPlayers; i++) {
+        //Maybe ask the names?
+        string name;
+        cout << "Enter the your player name: ";
+        getline(cin, name) >> name;
+        Player* p = new Player(name); //I'm inside a for loop, as soon as I get out of for loop it disappears so I need to make it into pointer.
+        
+        //Give coins to each player.
+        p->setCoins(initialCoins);
+
+        //Put the "player" in the vector of players
+        players.push_back(p);
+        
+        //Had segmentation fault here because p->getname was pointing to a nullpointer
+        std::cout << p->getNameForOthers() << " is ready, and has " << p->getCoinsForOthers() << " coins." << std::endl << std::endl;
+    }
+
+    vector<Player*> playersOfThisRound;
+    vector<Player*> previousWinner;
     //THE TOTAL NUMBER OF ROUNDS IN A TOURNAMENT GAME
-    for (int numOfBrackets = 0; numOfBrackets <= *(state.getNumOfPlayers())%2; numOfBrackets++) {
+    for (int numOfBrackets = 0; numOfBrackets <= numOfPlayers%2; numOfBrackets++) {
         /*
         state.numOfPlayer%2, when numOfPlayers = 4, is 2. The total number of games that will be conducted is player 1 vs player 2
         player 3 vs player 4, and the winner of the first round vs the winner of the second round.
@@ -146,16 +270,14 @@ void GameEngine::tournamentMode() {
         */
 
         //DECIDING THE PLAYERS THAT ARE GOING TO PLAY THIS ROUND (MAYBE RANDOMIZE? NOT THE PRIORITY RIGHT NOW)
-        vector<Player*> *playersOfThisRound;
-        vector<Player*> *previousWinner;
         if (numOfBrackets == 0) {
             /*
             The first round is always done by the first 2 players
             */
             for (int i = 0; i < 2; i++) {
-                playersOfThisRound->push_back(state.getPlayers()->at(i));
+                playersOfThisRound.push_back(players[i]);
             } 
-            std::cout << "====== The first and the final round (" << playersOfThisRound->at(0)->getNameForOthers() << " vs " << playersOfThisRound->at(1)->getNameForOthers() << ")======" << std::endl;
+            std::cout << "====== The first and the final round (" << playersOfThisRound[0]->getNameForOthers() << " vs " << playersOfThisRound[1]->getNameForOthers() << ")======" << std::endl;
         }
 
         if (numOfBrackets == 1) {
@@ -166,22 +288,22 @@ void GameEngine::tournamentMode() {
             -For 3 players, it's winner of the 1st round (player 1 vs player 2) vs player 3
             -For 4 players, it's player 3 vs player 4
             */
-            if (*(state.getNumOfPlayers()) == 3) {
+            if (numOfPlayers == 3) {
                 /*
                 The winner of round 1 vs the player 3
                 */
-                playersOfThisRound->push_back(previousWinner->at(0));
-                playersOfThisRound->push_back(state.getPlayers()->at(*(state.getNumOfPlayers())-1)); //The 3rd player 
-                std::cout << "====== The final round (" << playersOfThisRound->at(0)->getNameForOthers() << " vs " << playersOfThisRound->at(1)->getNameForOthers() << ")======" << std::endl;
+                playersOfThisRound.push_back(previousWinner[0]);
+                playersOfThisRound.push_back(players[numOfPlayers-1]); //The 3rd player 
+                std::cout << "====== The final round (" << playersOfThisRound[0]->getNameForOthers() << " vs " << playersOfThisRound[1]->getNameForOthers() << ")======" << std::endl;
             }
             else {
                 /*
                 Player 3 vs player 4
                 */
-                for (int i = 2; i < *(state.getNumOfPlayers()); i++) {
-                    playersOfThisRound->push_back(state.getPlayers()->at(i));
+                for (int i = 2; i < numOfPlayers; i++) {
+                    playersOfThisRound.push_back(players[i]);
                 }
-                std::cout << "====== The second round (" << playersOfThisRound->at(0)->getNameForOthers() << " vs " << playersOfThisRound->at(1)->getNameForOthers() << ")======" << std::endl;
+                std::cout << "====== The second round (" << playersOfThisRound[0]->getNameForOthers() << " vs " << playersOfThisRound[1]->getNameForOthers() << ")======" << std::endl;
             }
         }
 
@@ -192,47 +314,54 @@ void GameEngine::tournamentMode() {
             -The winner of 1st round (player 1 vs player 2) vs the winner of 2nd round (player 3 vs player 4)
             */
             for(int i = 0; i < 2; i++) {
-                playersOfThisRound->push_back(previousWinner->at(i));
+                playersOfThisRound.push_back(previousWinner[i]);
             }
-            std::cout << "====== The final round (" << playersOfThisRound->at(0)->getNameForOthers() << " vs " << playersOfThisRound->at(1)->getNameForOthers() << ")======" << std::endl;
+            std::cout << "====== The final round (" << playersOfThisRound[0]->getNameForOthers() << " vs " << playersOfThisRound[1]->getNameForOthers() << ")======" << std::endl;
         }
+
+        //Create different deck depending on the number of players
+        //The deck is shuffled when it is created.
+        cout << "==Creating the deck==" << endl << endl;
+        Deck deck = Deck(numOfPlayers);
 
         std::cout << "==Your hands==" << endl;
         //Create empty hands
         for (int i = 0; i < 2; i++) {
-            std::cout << playersOfThisRound->at(i)->getNameForOthers() << ": ";
-            playersOfThisRound->at(i)->initializeHand(); //giving each player an empty hand with 0 cards
-            playersOfThisRound->at(i)->printHand(); //Displaying the hand. Shouldn't print anything
+            std::cout << playersOfThisRound[i]->getNameForOthers() << ": ";
+            playersOfThisRound[i]->initializeHand(); //giving each player an empty hand with 0 cards
+            playersOfThisRound[i]->printHand(); //Displaying the hand. Shouldn't print anything
         }
         std::cout << endl;
 
         //The same for both game mode
+        
         std::cout << "==Generating the topboard==" << endl;
         //Draw 6 cards (top board)
-        vector<Cards*> *topboard = state.getDeck()->topBoardGenetor(*(state.getDeck()));
-        state.getDeck()->displayTopBoard(*topboard);
+        vector<Cards*> *topboard = deck.topBoardGenetor(deck);
+        deck.displayTopBoard(*topboard);
 
-        for (int i = 0; i < *(state.getNumOfPlayers()); i++) {
+        /*
+        for (int i = 0; i < numOfPlayers; i++) {
 
-            state.getPlayers()->at(i)->SetCubes(14);
+            players[i]->SetCubes(14);
 
-            state.getPlayers()->at(i)->SetDisks(3);
+            players[i]->SetDisks(3);
 
-            state.getPlayers()->at(i)->placeNewArmies(*(state.getMap()), 4, 0, i);
+            players[i]->placeNewArmies(m, 4, 0, i);
             
             std::cout << "Choose the index of the territory you want to place your army (except the starting region)." << std::endl;
             int index;
             cin >> index;
-            while (index == 0 || index > state.getMap()->getTerritoriesVector()->size()) {
+            while (index == 0 || index > m.getTerritoriesVector()->size()) {
                 std::cout << "You can't place your army there. Try again: " << endl;
                 cin >> index;
             };
-            state.getPlayers()->at(i)->placeNewArmies(*(state.getMap()), 1, index, i);
+            players[i]->placeNewArmies(m, 1, index, i);
         }
-
+        */
         int indexOfPlayers = 0;
-
-        if (*(state.getNumOfPlayers()) == 2) {
+        /*
+        if (numOfPlayers == 2) {
             Player* npc = new Player();
             npc->SetCubes(10);
             int selectTerr = 0;
@@ -240,17 +369,18 @@ void GameEngine::tournamentMode() {
 
                 indexOfPlayers %= 2; //This decides whose turn it is.
 
-                std::cout << state.getPlayers()->at(i)->getName() << ", enter the territory index to place non-player army: ";
+                std::cout << players[i]->getName() << ", enter the territory index to place non-player army: ";
                 cin >> selectTerr;
-                while (selectTerr > state.getMap()->getTerritoriesVector()->size() || selectTerr < 1) {
+                while (selectTerr > m.getTerritoriesVector()->size() || selectTerr < 1) {
                     std::cout << "Invalid Territory ID. Try again: ";
                     cin >> selectTerr;
                 }
-                state.getPlayers()->at(i)->placeNewArmies((*state.getMap()), selectTerr, 1, *(state.getNumOfPlayers())+1);
+                players[i]->placeNewArmies(m, selectTerr, 1, numOfPlayers+1);
 
                 indexOfPlayers++;
             }
         }
+        */
 
         //Bidding
         //Obtain the bidding coins of each player.
@@ -259,7 +389,7 @@ void GameEngine::tournamentMode() {
         for (int i = 0; i < 2; i++) {
             cin.clear();
             cin.ignore();
-            playersOfThisRound->at(i)->setBid(playersOfThisRound->at(i));
+            playersOfThisRound[i]->setBid(playersOfThisRound[i]);
         }
 
         std::cout << endl;
@@ -270,38 +400,34 @@ void GameEngine::tournamentMode() {
         Player* winner = calculator.resolveBids();
 
         //WHAT IS HAPPENING?
-        std::cout << winner->getNameForOthers() << " goes first." << std::endl;
+        std::cout << winner->getNameForOthers() << " goes first." << std::endl << endl;
 
         //the winner goes first 
         int playerOrder = 0;
 
+        for (auto it = players.begin(); it != players.end(); ++it, playerOrder++) {
+            if ((players[playerOrder])->getName() == winner->getName()) {
+                auto first = *it;
+                players.erase(it);
+                players.insert(players.begin(), first /* or std::move(first)*/) ;
+                break;
+            }
+        }
+
         indexOfPlayers = 0;
-        //Keep playing until everyone's hand is at least 11
-        bool continueTheGame = false;
-        do {
+        //Keep playing until turn 20
+        for (int turn = 0; turn < 20; turn++) {
             //This decides whose turn it is.
-            std::cout << "It is currently " << state.getPlayers()->at(indexOfPlayers)->getNameForOthers() << "'s turn to play." << std::endl;
+            std::cout << "Turn #" << turn+1 << endl << endl;
+            std::cout << "It is currently " << players[indexOfPlayers]->getNameForOthers() << "'s turn to play." << std::endl << endl;
             
             //Buy
-            state.getDeck()->exchange(state.getPlayers()->at(indexOfPlayers), *(state.getTopboard()), *(state.getDeck())); //You have to dereference because you are taking a reference to a player.
+            deck.exchange(players[indexOfPlayers], *topboard, deck); //You have to dereference because you are taking a reference to a player.
 
             indexOfPlayers++;
             indexOfPlayers %= 2;
             //Had to place indexOfPlayer%2 after indexOfPlayer++
-
-            //Check if every single player has 11 cards in their hand
-            for (int eachPlayer = 0; eachPlayer < *(state.getNumOfPlayers()); eachPlayer++) {
-                if (state.getPlayers()->at(indexOfPlayers)->getHandContent().size() < 11) {
-                    continueTheGame = true;
-                }
-                else {
-                    continueTheGame = false;
-                    break;
-                }
-            }
         }
-        while (continueTheGame == true);
-
         //DESTRUCTORS EACH ROUND?
         
     }
