@@ -39,9 +39,7 @@ public:
 
 	//get and set methods
 	string* getFileName() const;
-	Map* getMap() const;
-	void setMap(Map);
-	void setFileName(std::string);
+	void setFileName(string);
 
 	//method to generate map
 	Map* GenerateMap();
@@ -49,6 +47,5 @@ public:
 
 private:
 	//variables
-	Map* m;
 	string* filename;
 };
