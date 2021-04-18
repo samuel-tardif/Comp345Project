@@ -90,7 +90,7 @@ bool Map::connectedGraph()
 
 	cout << "Valid graph: " << isConnected << endl;
 
-	delete visited;
+	//delete visited;
 
 	return isConnected;
 }
@@ -125,7 +125,7 @@ void Map::DFS(int visiting, vector<bool>* visited)
 			DFS(adjIndex,visited);
 		}
 	}
-	delete adj;
+	//delete adj;
 }
 
 //Function to check if continent is connected, takes as parameter the number of the continent
@@ -182,7 +182,7 @@ bool Map::connectedContinent(int continent) {
 
 	cout << "Continent " << continent << " connected : " << isConnected << endl;
 
-	delete visited;
+	//delete visited;
 
 	return isConnected;
 }
