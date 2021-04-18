@@ -56,16 +56,17 @@ Map* MapLoader::GenerateMap() {
 
 
 	int a, b, c = 0;
-	ifstream input(*filename);
+	//ifstream input(*filename);
 	//checks if file is opened or not
-	if (input.is_open()) {
+	if (myfile.is_open()) {
 		cout << "File opened successfully" << endl;
 	}
 	else {
 		cout << "Error: Invalid map file. " << endl;
+		exit(1);
 	}
 	//parses through the a to create territories
-	while (input >> a) {
+	while (myfile >> a) {
 
 		//breaks if delimiter is found
 		if (a == 99) {
@@ -76,7 +77,7 @@ Map* MapLoader::GenerateMap() {
 		}
 	}
 	//parses through pairs of connections to create connections
-	while (input >> b >> c) {
+	while (myfile >> b >> c) {
 		m->createConnection(b, c);
 	}
 	//prints map object
@@ -88,12 +89,19 @@ Map* MapLoader::GenerateMap() {
 		cout << *v->at(i).at(0) << endl;
 	}
 	//validates map object
+	/*
 	if (m->validate()) {
 		return m;
 	}
 	else {
 		return nullptr;
 	}
+	*/
+	if (!m->validate()) {
+		cout << "Map is invalid, please enter a valid map" << endl;
+		exit(1);
+	}
+	return m;
 	
 };
 

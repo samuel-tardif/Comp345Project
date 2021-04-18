@@ -66,23 +66,17 @@ bool Map::validate()
 //Method to check if the whole graph is connected
 bool Map::connectedGraph()
 {
-	cout << "before visited vector creation" <<endl;
 	//Creating our visited vec to keep track of where we went
 	std::vector<bool> visited;
 	//Size has to be size of our territory vector
-	cout << "vector push back" << endl;
 	for (int i = 0; i < territoriesVector->size(); i++) {
 		visited.push_back(false);
 	}
-
-	cout <<"before dfs" << endl;
-	cout << "out of bounds somewhere in dfs..." << endl;
 	DFS(0, &visited);
 
 	//Initializing our boolean, willll be true unless proven otherwise
 	bool isConnected = true;
 
-	cout << "before for loop" << endl;
 	//Iterating through visited
 	for (int i = 0; i < visited.size(); i++) {
 		//If one node is not visited graph is not connected
@@ -100,18 +94,17 @@ bool Map::connectedGraph()
 void Map::DFS(int visiting, vector<bool>* visited)
 {
 	visited->at(visiting) = true;
-
+	//APPARENTLY TERRITORY VECTOR IS EMPTY...
 	//The index of the territories adjacent to our visiting
 	int adjIndex=0;
 	Territory* adj = new Territory();
+
 	//For all connections checking if we need a recursive call
 	for (int i = 1; i < territoriesVector->at(visiting).size(); i++) {
 		
-
 		//Finding our adj territory
 		adj = territoriesVector->at(visiting).at(i);
 		
-
 		//Finding the index of our adjacent territory
 		for (int j = 0; j < territoriesVector->size(); j++) {
 
@@ -124,7 +117,7 @@ void Map::DFS(int visiting, vector<bool>* visited)
 			DFS(adjIndex,visited);
 		}
 	}
-	delete adj;
+	//delete adj;
 }
 
 //Function to check if continent is connected, takes as parameter the number of the continent
@@ -146,6 +139,7 @@ bool Map::connectedContinent(int continent) {
 	//Size has to be size of our territory vector
 	for (int i = 0; i < territoriesVector->size(); i++) {
 		
+		cout << "in connectedcontinent's for loop, before if"<< endl;
 		//If territory is in proper continent
 		if (territoriesVector->at(i).at(0)->getContinent() == continent) {
 			//We will need to reach it with DFS
@@ -237,13 +231,7 @@ Map::Territory::Territory(const Territory &ter)
 }
 
 //Destructor
-Map::Territory::~Territory()
-{
-	delete owner;
-	delete nbArmies1;
-	delete nbArmies2;
-	delete continent;
-}
+Map::Territory::~Territory() {}
 
 Map::~Map() {
 	delete territoriesVector;
@@ -266,17 +254,13 @@ void Map::createConnection(int firstTer, int secondTer)
 //Change a value of nb armies on territory from index
 void Map::changeNumberArmies(int index, int nbArmies, int player) //0, 4, 1
 {
-	cout << "Good until here 2.6" << endl;
 	if (player == 1) {
 		cout << "Good until here 2.7.1" << endl;
 		territoriesVector->at(index).at(0)->setNbArmies1(nbArmies); //Problem happening here
 		//territoriesVector[0, 0] set number of armies to 4
-		cout << "Good until here 2.7.1.2" << endl;
 	}
 	else {
-		cout << "Good until here 2.7.2" << endl;
 		territoriesVector->at(index).at(0)->setNbArmies2(nbArmies);
-		cout << "Good until here 2.7.2.2" << endl;
 	}
 	cout << "Territory " << index << " now has " << nbArmies << " armies" << endl;
 }

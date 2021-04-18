@@ -149,11 +149,9 @@ bool Player::payCoin(int cost)
 //Actions
 void Player::placeNewArmies(Map m, int numArmies, int index, int player) {
 
-	cout << "Good until 2.4" << endl;
 	//Check army availability. Can't place an army if theyre all already deployed
 
 	if ((*cubes - numArmies) >= 0) {
-		cout << "Good until 2.5" << endl;
 		*cubes - numArmies;
 		m.changeNumberArmies(index, numArmies, player + 1); //0, 4, 0
 

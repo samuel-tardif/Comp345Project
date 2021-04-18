@@ -197,7 +197,7 @@ void GameEngine::tournamentMode() {
         loader.setFileName(fileLocation);
         map = loader.GenerateMap();
     }
-    //TO HERE========================================
+    //TO HERE
 
 
     //The number of turns in each game
@@ -339,7 +339,6 @@ void GameEngine::tournamentMode() {
         //Draw 6 cards (top board)
         vector<Cards*> *topboard = deck.topBoardGenetor(deck);
         deck.displayTopBoard(*topboard);
-
         /*
         for (int i = 0; i < numOfPlayers; i++) {
 
@@ -347,16 +346,20 @@ void GameEngine::tournamentMode() {
 
             players[i]->SetDisks(3);
 
-            players[i]->placeNewArmies(m, 4, 0, i);
+            players[i]->placeNewArmies(*map, 4, 0, i);
             
             std::cout << "Choose the index of the territory you want to place your army (except the starting region)." << std::endl;
             int index;
             cin >> index;
-            while (index == 0 || index > m.getTerritoriesVector()->size()) {
+            while (index == 0 || index > map->getTerritoriesVector()->size()) {
                 std::cout << "You can't place your army there. Try again: " << endl;
                 cin >> index;
             };
-            players[i]->placeNewArmies(m, 1, index, i);
+            players[i]->placeNewArmies(*map, 1, index, i); //THIS CALL HAS PROBLEMS
+        }
+
+        for (int i = 0; i < numOfPlayers; i++) {
+
         }
         */
         int indexOfPlayers = 0;
@@ -371,16 +374,17 @@ void GameEngine::tournamentMode() {
 
                 std::cout << players[i]->getName() << ", enter the territory index to place non-player army: ";
                 cin >> selectTerr;
-                while (selectTerr > m.getTerritoriesVector()->size() || selectTerr < 1) {
+                while (selectTerr > map->getTerritoriesVector()->size() || selectTerr < 1) {
                     std::cout << "Invalid Territory ID. Try again: ";
                     cin >> selectTerr;
                 }
-                players[i]->placeNewArmies(m, selectTerr, 1, numOfPlayers+1);
+                players[i]->placeNewArmies(*map, selectTerr, 1, numOfPlayers+1);
 
                 indexOfPlayers++;
             }
         }
         */
+        
 
         //Bidding
         //Obtain the bidding coins of each player.
