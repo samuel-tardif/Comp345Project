@@ -189,11 +189,12 @@ void Player::MoveOverLand(int nbarmies, Map& start, Map& stop)
 */
 void Player::BuildCity(Map& cityplace)
 {
-	if ( *disks == 0) {
+	if (*disks == 0) {
 		std::cout << "no resources to build city" << std::endl;
 	}
 	else {
-		SetDisks( *disks - 1);
+		cityplace.addTerritory();
+		SetDisks(getDisks() - 1);
 		std::cout << "builds city" << std::endl;
 	}
 
