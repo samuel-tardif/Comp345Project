@@ -43,7 +43,9 @@ public:
 	Player(string name);
 	Player(Player& copied);
 	Player& operator = (const Player &p);
-
+	//string insertion stuff
+	friend ostream& operator << (ostream& out, const Player& player);
+	friend istream& operator >> (istream& in, Player& c);
 	//Actions
 	bool payCoin(int cost); 
 	//bool payCoin(Player* p, int cost);
