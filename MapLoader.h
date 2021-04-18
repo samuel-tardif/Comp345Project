@@ -44,7 +44,7 @@ public:
 	void setFileName(std::string);
 
 	//method to generate map
-	void GenerateMap();
+	Map* GenerateMap();
 
 
 private:

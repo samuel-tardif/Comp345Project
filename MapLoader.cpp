@@ -61,7 +61,7 @@ void MapLoader::setFileName(std::string newFile) {
 };
 
 //generate map method
-void MapLoader::GenerateMap() {
+Map* MapLoader::GenerateMap() {
 	//opens the file
 	std::fstream myfile;
 	myfile.open(*filename, std::fstream::in);
@@ -106,8 +106,5 @@ void MapLoader::GenerateMap() {
 		cout << "Map is invalid, please enter a valid map" << endl;
 		exit(1);
 	}
+	return m;
 };
-
-
-
-
