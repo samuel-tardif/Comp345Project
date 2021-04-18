@@ -255,4 +255,16 @@ vector<Cards*>& Player::getHandSize() {
 void Player::setHand(vector<Cards*>& v) {
 	hand->swapHand(v);
 }
+ostream& operator << (ostream& out, const Player& player)
+{
+	out << player.name;
+	out << "Player name is: " << player.name << endl;
+	return out;
+}
 
+istream& operator >> (istream& in, Player& player)
+{
+	cout << "Enter name of player:";
+	in >> player.getName();
+	return in;
+}
