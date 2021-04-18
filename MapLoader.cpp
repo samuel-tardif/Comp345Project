@@ -84,7 +84,7 @@ void MapLoader::GenerateMap() {
 			break;
 		}
 		else {
-			m->addTerritory(0, 0, a);
+			m->addTerritory(0, 0, 0, a);
 		}
 	}
 	//parses through pairs of connections to create connections
