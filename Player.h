@@ -78,7 +78,9 @@ public:
 	void setCountries(int countries);
 	void setCoins(int coins);
 	std::string getNameForOthers() const;
-
+	//string insertion stuff
+	friend ostream& operator << (ostream& out, const Player& player);
+	friend istream& operator >> (istream& in, Player& c);
 	/*
 	Changing this now
 	*/
