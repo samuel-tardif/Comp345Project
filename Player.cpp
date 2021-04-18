@@ -4,7 +4,10 @@ ID: 40111703
 Date : 21/02/2021
 For COMP 345 -Assignment 1
 ------------------------------------------------------------------------------------------------*/
+#pragma once
+
 #include "Player.h"
+#include "GameStateObserver.h"
 
 Player::Player()
 {
