@@ -14,6 +14,7 @@ For COMP 345 -Assignment 3
 GameState& GameState::operator=(const GameState& gs)
 {
 	currentPlayer = gs.getCurrentPlayer();
+	return *this;
 }
 
 
@@ -53,4 +54,5 @@ GameState::~GameState()
 std::ostream& operator<<(std::ostream& output, const GameState& gs)
 {
 	cout << gs.getCurrentPlayer()->getName();
+	return output;
 }

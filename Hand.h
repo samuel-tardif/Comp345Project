@@ -13,7 +13,7 @@ using namespace std;
 
 class Cards;
 
-class Hand {
+class Hand : public Observable {
 
     private:
 

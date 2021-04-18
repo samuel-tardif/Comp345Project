@@ -46,7 +46,7 @@ public:
 
 
 
-	class Territory {
+	class Territory : public Observable {
 
 		
 	public:

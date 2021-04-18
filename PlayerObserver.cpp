@@ -24,5 +24,5 @@ void PlayerObserver::Update()
 void PlayerObserver::display()
 {
 	cout << "display Player through observer" << endl;
-	cout << *_subject << endl;
+	//cout << *_subject << endl;
 }

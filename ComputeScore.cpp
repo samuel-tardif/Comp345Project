@@ -88,8 +88,8 @@ Player* ComputeScore::determineWinner()
 
 	//Check points from game hand
 	//Retrieving game hands
-	Hand p1GameHand = *player1->getHand();
-	Hand p2GameHand = *player2->getHand();
+	Hand p1GameHand = player1->getHand();
+	Hand p2GameHand = player2->getHand();
 
 	//Setting up lixirs totals
 	int* p1Elixirs = new int(0);
