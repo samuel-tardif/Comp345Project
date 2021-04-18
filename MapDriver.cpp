@@ -39,6 +39,8 @@ int main()
     m->createConnection(2, 1);
     m->createConnection(2, 3);
 
+    m->changeNumberArmies(3, 10, 1);
+
     //String insertion demo
     cout << *m << endl;
     //String insertion for territories
@@ -52,7 +54,6 @@ int main()
     //Validating
     m->validate();
 
-    delete v;
 
     //Second test
     cout << endl << endl << "creating Second map" << endl;
