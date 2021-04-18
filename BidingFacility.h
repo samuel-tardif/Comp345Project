@@ -11,6 +11,7 @@ For COMP 345 -Assignment 1
 
 //Includes
 #include <iostream>
+#include <conio.h>
 #include "Player.h"
 
 class Player;
@@ -52,7 +53,7 @@ public:
 	Player* getOwner() const;
 
 	//Determines who wins the bid
-	static Player* resolveBids(vector<Player*> players);
+	static Player* resolveBids();
 
 	//Added accessors and mutators
 	int getBidAmount();
