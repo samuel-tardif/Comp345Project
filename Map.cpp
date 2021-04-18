@@ -13,13 +13,11 @@ For COMP 345 -Assignment 1
 using std::cout;
 using std::cin;
 using std::endl;
-using std::vector;
-
 
 //Default constructor
 Map::Map()
 {
-	territoriesVector = new std::vector<std::vector<Territory*>>;
+	territoriesVector = new std::vector<std::vector<Territory*>>(); //added paranthesis
 }
 
 //Copy constructor
@@ -69,28 +67,25 @@ bool Map::validate()
 bool Map::connectedGraph()
 {
 	//Creating our visited vec to keep track of where we went
-	vector<bool>* visited = new vector<bool>;
+	std::vector<bool> visited;
 	//Size has to be size of our territory vector
 	for (int i = 0; i < territoriesVector->size(); i++) {
-		visited->push_back(false);
+		visited.push_back(false);
 	}
-
-	DFS(0, visited);
+	DFS(0, &visited);
 
 	//Initializing our boolean, willll be true unless proven otherwise
 	bool isConnected = true;
 
 	//Iterating through visited
-	for (int i = 0; i < visited->size(); i++) {
+	for (int i = 0; i < visited.size(); i++) {
 		//If one node is not visited graph is not connected
-		if (visited->at(i) == false) {
+		if (visited.at(i) == false) {
 			isConnected = false;
 		}
 	}
 
 	cout << "Valid graph: " << isConnected << endl;
-
-	//delete visited;
 
 	return isConnected;
 }
@@ -99,27 +94,24 @@ bool Map::connectedGraph()
 void Map::DFS(int visiting, vector<bool>* visited)
 {
 	visited->at(visiting) = true;
-
+	//APPARENTLY TERRITORY VECTOR IS EMPTY...
 	//The index of the territories adjacent to our visiting
 	int adjIndex=0;
 	Territory* adj = new Territory();
+
 	//For all connections checking if we need a recursive call
 	for (int i = 1; i < territoriesVector->at(visiting).size(); i++) {
 		
-
 		//Finding our adj territory
 		adj = territoriesVector->at(visiting).at(i);
 		
-
 		//Finding the index of our adjacent territory
 		for (int j = 0; j < territoriesVector->size(); j++) {
 
 			if (adj == territoriesVector->at(j).at(0)) {
 				adjIndex = j;
 			}
-		}
-
-		
+		}		
 
 		if (visited->at(adjIndex) == false) {
 			DFS(adjIndex,visited);
@@ -147,6 +139,7 @@ bool Map::connectedContinent(int continent) {
 	//Size has to be size of our territory vector
 	for (int i = 0; i < territoriesVector->size(); i++) {
 		
+		cout << "in connectedcontinent's for loop, before if"<< endl;
 		//If territory is in proper continent
 		if (territoriesVector->at(i).at(0)->getContinent() == continent) {
 			//We will need to reach it with DFS
@@ -182,7 +175,7 @@ bool Map::connectedContinent(int continent) {
 
 	cout << "Continent " << continent << " connected : " << isConnected << endl;
 
-	//delete visited;
+	delete visited;
 
 	return isConnected;
 }
@@ -238,13 +231,7 @@ Map::Territory::Territory(const Territory &ter)
 }
 
 //Destructor
-Map::Territory::~Territory()
-{
-	delete owner;
-	delete nbArmies1;
-	delete nbArmies2;
-	delete continent;
-}
+Map::Territory::~Territory() {}
 
 Map::~Map() {
 	delete territoriesVector;
@@ -267,20 +254,15 @@ void Map::createConnection(int firstTer, int secondTer)
 //Change a value of nb armies on territory from index
 void Map::changeNumberArmies(int index, int nbArmies, int player) //0, 4, 1
 {
-	cout << "Good until here 2.6" << endl;
 	if (player == 1) {
 		cout << "Good until here 2.7.1" << endl;
 		territoriesVector->at(index).at(0)->setNbArmies1(nbArmies); //Problem happening here
 		//territoriesVector[0, 0] set number of armies to 4
-		cout << "Good until here 2.7.1.2" << endl;
 	}
 	else {
-		cout << "Good until here 2.7.2" << endl;
 		territoriesVector->at(index).at(0)->setNbArmies2(nbArmies);
-		cout << "Good until here 2.7.2.2" << endl;
 	}
 	cout << "Territory " << index << " now has " << nbArmies << " armies" << endl;
-
 }
 
 
@@ -335,19 +317,16 @@ int Map::Territory::getContinent() const
 void Map::Territory::setOwner(int newOwner)
 {
 	*owner = newOwner;
-	this->Notify();
 }
 
 //Standard setter
 void Map::Territory::setNbArmies1(int newNbArmies)
 {
 	*nbArmies1 = newNbArmies;
-	this->Notify();
 }
 void Map::Territory::setNbArmies2(int newNbArmies)
 {
 	*nbArmies2 = newNbArmies;
-	this->Notify();
 }
 
 //Standard setter
