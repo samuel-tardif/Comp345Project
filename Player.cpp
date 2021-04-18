@@ -147,7 +147,7 @@ bool Player::payCoin(int cost)
 }
 
 //Actions
-void Player::placeNewArmies(Map m, int numArmies, int index, int player) {
+void Player::placeNewArmies(Map& m, int numArmies, int index, int player) {
 
 	//Check army availability. Can't place an army if theyre all already deployed
 
@@ -162,31 +162,36 @@ void Player::placeNewArmies(Map m, int numArmies, int index, int player) {
 	}
 }
 
-/*
-void Player::MoveArmies(int nbarmy, Map& start, Map& stop)
+void Player::MoveArmies(int nbarmy, Map::Territory& start, Map::Territory& stop)
 {
 
-	vector<int*> armystart = start.getnbArmies1();
-	vector<int*> armystop = stop.getNbArmies1();
+	int armystart = start.getNbArmies1();
+	int armystop = stop.getNbArmies1();
 
-	*armystart.at(*playerID) = armystart.at(*playerID) - nbarmy;
-	start.setNbArmies1(armystart);
-
-	*armystop.at(*playerID) = armystop.at(*playerID) + nbarmy;
-	stop.setNbArmies1(armystop);
+	start.setNbArmies1(armystart - nbarmy);
+	stop.setNbArmies1(armystop + nbarmy);
 
 	std::cout << "moves army" << std::endl;
 }
-*/
-/*
-void Player::MoveOverLand(int nbarmies, Map& start, Map& stop)
+
+void Player::MoveOverLand(int nbarmies, Map::Territory& start, Map::Territory& stop, Map& m, int continent)
 {
-	
-	MoveArmies(nbarmies, start, stop);
-	std::cout << "moves over land" << std::endl;
+	if ((m.connectedContinent(continent) == true) && (m.connectedGraph() == true)) {
+		MoveArmies(nbarmies, start, stop);
+		std::cout << "moves over land" << std::endl;
+	}
+	else std::cout << "land is not connected, can't move over land" << std::endl;
 
 }
-*/
+
+void Player::MoveOverWater(int nbarmies, Map::Territory& start, Map::Territory& stop, Map& m, int continent)
+{
+	if ((m.connectedContinent(continent) == false) && (m.connectedGraph() == true)) {
+		MoveArmies(nbarmies, start, stop);
+		std::cout << "moves over water" << std::endl;
+	}
+	else std::cout << "land is no water to cross" << std::endl;
+}
 void Player::BuildCity(Map& cityplace)
 {
 	if ( *disks == 0) {
