@@ -3,6 +3,13 @@
 
 GameState::GameState(bool tournament) {
 
+    if (tournament) {
+        std::cout << "TOURNAMENT MODE" << endl;
+    }
+    else {
+        std::cout << "SINGLE GAME MODE" << endl;
+    }
+
     //Validate Map and create
     bool validMap = false;
 
@@ -76,7 +83,7 @@ GameState::GameState(bool tournament) {
         players->push_back(p);
         
         //Had segmentation fault here because p->getname was pointing to a nullpointer
-        std::cout << p->getName() << " is ready, and has " << p->getCoins() << " coins." << std::endl << std::endl;
+        std::cout << p->getNameForOthers() << " is ready, and has " << p->getCoinsForOthers() << " coins." << std::endl << std::endl;
         //SEGMENTATION FAULT? CAN'T FIND NAME AND COINS? BUT THERE ARE THERE IN LINE 76...
     }
 

@@ -29,12 +29,9 @@ ComputeScore::ComputeScore(const ComputeScore& copied)
 //Constructor with parameters
 ComputeScore::ComputeScore(Player* p1, Player* p2, Map* m)
 {
-	this->player1 = new Player("Default");
-	this->player2 = new Player("Default");
-	this->map = new Map();
-	player1 = p1;
-	player2 = p2;
-	map = m;
+	this->player1 = p1;
+	this->player2 = p2;
+	this->map = m;
 }
 
 //= Operator overload
@@ -47,13 +44,7 @@ ComputeScore& ComputeScore::operator=(const ComputeScore& bF)
 }
 
 //Destructor
-ComputeScore::~ComputeScore()
-{
-	delete player1;
-	delete player2;
-	delete map;
-}
-
+ComputeScore::~ComputeScore() {}
 
 //THE BIG ONE - function to get scores and determine winner
 Player* ComputeScore::determineWinner()

@@ -13,11 +13,11 @@ For COMP 345 -Assignment 1
 using std::cout;
 using std::cin;
 using std::endl;
-using std::vector;
+
 //Default constructor
 Map::Map()
 {
-	territoriesVector = new std::vector<std::vector<Territory*>>;
+	territoriesVector = new std::vector<std::vector<Territory*>>(); //added paranthesis
 }
 
 //Copy constructor
@@ -66,29 +66,32 @@ bool Map::validate()
 //Method to check if the whole graph is connected
 bool Map::connectedGraph()
 {
+	cout << "before visited vector creation" <<endl;
 	//Creating our visited vec to keep track of where we went
-	vector<bool>* visited = new vector<bool>;
+	std::vector<bool> visited;
 	//Size has to be size of our territory vector
+	cout << "vector push back" << endl;
 	for (int i = 0; i < territoriesVector->size(); i++) {
-		visited->push_back(false);
+		visited.push_back(false);
 	}
 
-	DFS(0, visited);
+	cout <<"before dfs" << endl;
+	cout << "out of bounds somewhere in dfs..." << endl;
+	DFS(0, &visited);
 
 	//Initializing our boolean, willll be true unless proven otherwise
 	bool isConnected = true;
 
+	cout << "before for loop" << endl;
 	//Iterating through visited
-	for (int i = 0; i < visited->size(); i++) {
+	for (int i = 0; i < visited.size(); i++) {
 		//If one node is not visited graph is not connected
-		if (visited->at(i) == false) {
+		if (visited.at(i) == false) {
 			isConnected = false;
 		}
 	}
 
 	cout << "Valid graph: " << isConnected << endl;
-
-	delete visited;
 
 	return isConnected;
 }
@@ -115,9 +118,7 @@ void Map::DFS(int visiting, vector<bool>* visited)
 			if (adj == territoriesVector->at(j).at(0)) {
 				adjIndex = j;
 			}
-		}
-
-		
+		}		
 
 		if (visited->at(adjIndex) == false) {
 			DFS(adjIndex,visited);

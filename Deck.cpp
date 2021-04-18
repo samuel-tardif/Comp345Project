@@ -47,7 +47,7 @@ Cards* cards34 = new Cards("Castle 2", "ELIXIR 1", "MOVE ARMIES 3 AND BUILD A CI
 
 Deck::Deck() {
     vector<Cards*> *deck = nullptr;
-    int *cost = nullptr;
+    //int *cost = new int(0);
 
     //By default, create a deck for 2 players
     createDeck(2);
@@ -56,7 +56,7 @@ Deck::Deck() {
 
 Deck::Deck(int numOfPlayers) {
     vector<Cards*> *deck = nullptr;
-    int *cost = 0;
+    //nt *cost = new int(0); //THIS IS ACTUALLY A NULL POINTER
 
     createDeck(numOfPlayers);
     shuffleDeck();
@@ -124,11 +124,13 @@ void Deck::createDeck(int numOfPlayers) {
 
 //Destructor (more member need to be added)
 Deck::~Deck() {
-    
+    /*
     if(cost){
         delete cost;
         cost = nullptr;
     }
+    */
+    
     if(position){
         delete position;
         position = nullptr;
@@ -138,14 +140,14 @@ Deck::~Deck() {
 //Copy constructor (more member need to be added)
 Deck::Deck(const Deck& copied) //removed const before Deck&
 {
-	this->cost = copied.getCost();
+	//this->cost = copied.getCost();
     this->position = copied.getPosition();
 }
 
 //Overload the = operator (more member need to be added)
 Deck& Deck::operator=(const Deck& d) //removed const before Deck&
 {
-	cost = d.getCost();
+	//cost = d.getCost();
     position = d.getPosition();
 
 	return *this;
@@ -153,13 +155,14 @@ Deck& Deck::operator=(const Deck& d) //removed const before Deck&
 
 //Stream insertion operator (more member need to be added)
 ostream& operator<<(ostream& os, const Deck& deck) {
-    os << *deck.getCost() << " (" << *deck.getPosition() << ") " << std::endl;
+    os << /**deck.getCost()*/ " (" << *deck.getPosition() << ") " << std::endl;
     return os;
 }
-
+/*
 int *Deck::getCost() const {
     return this->cost;
 }
+*/
 
 int *Deck::getPosition() const {
     return this->position;
@@ -221,7 +224,7 @@ void Deck::exchange(Player* player, std::vector<Cards*>& topBoard, Deck& deck) {
 
     // allow player to purchase a card
     cout << player->getNameForOthers() << ", you have " << player->getCoinsForOthers() << " coins remaining." << endl;
-    cout << "Which card do you want to buy? Please enter a number from 1 to 6: " << endl;
+    cout << "Which card do you want to buy? Please enter a number from 1 to 6: ";
     do {
         cin >> position;
         if (position < 1 || position > 6) {
@@ -240,6 +243,7 @@ void Deck::exchange(Player* player, std::vector<Cards*>& topBoard, Deck& deck) {
         else if (position == 6) {
             cost = 3;
         }
+        cout << endl;
         successfullPurchase = player->payCoin(cost);
     } while (!successfullPurchase);
 
@@ -252,7 +256,7 @@ void Deck::exchange(Player* player, std::vector<Cards*>& topBoard, Deck& deck) {
     player->getHandContent().push_back(topBoard[index]);
     topBoard.erase(topBoard.begin() + index);
     topBoard.emplace_back(deck.draw());
-    cout << player->getNameForOthers() << " added [" << *player->getHandContent().back() << "] to their hand." << endl; //
+    cout << player->getNameForOthers() << " added [" << *player->getHandContent().back() << "] to their hand." << endl << endl; //
 }
 
 //The function to print the content of the deck

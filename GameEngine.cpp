@@ -180,23 +180,25 @@ void GameEngine::singleGameMode() {
 void GameEngine::tournamentMode() {
     std::cout << "TOURNAMENT MODE" << endl;
     //Validate map
-    //GameState state = GameState(true);
+    //COMMENT OUT FROM HERE========================================
     bool validMap = false;
 
-    while (!validMap)
-    {
-        // load map
-        MapLoader loader;
+    // load map
+    MapLoader loader;
 
-        // get file location
-        std::string fileLocation;
+    Map* map = nullptr;
+
+    // get file location
+    std::string fileLocation;
+
+    while (!map) { //true if map is a nullptr, nullptr is basically false.
         std::cout << "Enter map file location: ";
         std::cin >> fileLocation;
         loader.setFileName(fileLocation);
-        loader.GenerateMap();
-
-        validMap = true;
+        map = loader.GenerateMap();
     }
+    //TO HERE========================================
+
 
     //The number of turns in each game
     int gamenLength = 20; 
@@ -206,8 +208,6 @@ void GameEngine::tournamentMode() {
     int initialCoins;
 
     vector<Player*> players;
-
-    Map m;
 
     //Obtain the number of players who will be playing this game.
     std::cout << "How many people are playing (2~4)? : ";
@@ -322,7 +322,7 @@ void GameEngine::tournamentMode() {
         //Create different deck depending on the number of players
         //The deck is shuffled when it is created.
         cout << "==Creating the deck==" << endl << endl;
-        Deck deck = Deck(numOfPlayers);
+        Deck deck = Deck(2); //ALWAYS 2 IN TOURNAMENT MODE
 
         std::cout << "==Your hands==" << endl;
         //Create empty hands
@@ -429,9 +429,15 @@ void GameEngine::tournamentMode() {
             //Had to place indexOfPlayer%2 after indexOfPlayer++
         }
         //DESTRUCTORS EACH ROUND?
-        
+        cout << "out of for loop" << endl;
     }
     //Obtain and show the results
-    ComputeScore cp;
+    ComputeScore cp(players[0], players[1], map);
     cp.determineWinner();
+
+    for (auto* p: players) {
+        delete p;
+    }
+    delete map;
+    cout<< "End of tournament mode" << endl;
 };

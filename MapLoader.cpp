@@ -22,33 +22,21 @@ using namespace std;
 //default constructor
 MapLoader::MapLoader() {
 	filename = new string;
-	m = new Map();
 };
 //copy constructor
 MapLoader::MapLoader(const MapLoader& copied) {
 
 	this-> filename = copied.getFileName();
-	this-> m = copied.getMap();
 };
 //operator overload
 MapLoader& MapLoader::operator=(const MapLoader& g) {
 	string *file = new string;
 	file = g.getFileName();
-	m = g.getMap();
 	return *this;
 };
 //destructor
 MapLoader::~MapLoader() {
 	delete filename;
-	delete m;
-};
-
-//get and set methods
-Map* MapLoader::getMap() const {
-	return m;
-};
-void MapLoader::setMap(Map t) {
-	*m = t;
 };
 
 string* MapLoader::getFileName() const {
@@ -60,7 +48,9 @@ void MapLoader::setFileName(string newFile) {
 };
 
 //generate map method
-void MapLoader::GenerateMap() {
+Map* MapLoader::GenerateMap() {
+
+	Map* m = new Map();
 	//opens the file
 	std::ifstream myfile(*filename, std::ios_base::in);
 
@@ -69,7 +59,7 @@ void MapLoader::GenerateMap() {
 	ifstream input(*filename);
 	//checks if file is opened or not
 	if (input.is_open()) {
-		cout << "file opened successfully" << endl;
+		cout << "File opened successfully" << endl;
 	}
 	else {
 		cout << "Error: Invalid map file. " << endl;
@@ -88,7 +78,7 @@ void MapLoader::GenerateMap() {
 	//parses through pairs of connections to create connections
 	while (input >> b >> c) {
 		m->createConnection(b, c);
-
+	}
 	//prints map object
 	cout << *m << endl;
 
@@ -98,8 +88,13 @@ void MapLoader::GenerateMap() {
 		cout << *v->at(i).at(0) << endl;
 	}
 	//validates map object
-	m->validate();
+	if (m->validate()) {
+		return m;
 	}
+	else {
+		return nullptr;
+	}
+	
 };
 
 

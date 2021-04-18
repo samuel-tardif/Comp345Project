@@ -18,7 +18,7 @@ private:
     vector<Cards*> deck;
 	vector<Cards*> ptrCard;
 	
-    int* cost;
+    //int* cost;
     int* position;
     int posArray[6] = { 0, 1, 1, 2, 2, 3 };
     // std::vector<Cards*> topBoard;
@@ -41,7 +41,7 @@ public:
 
     // Accessors
     //vector<Cards*> *getDeck() const;
-    int *getCost() const;
+    //int *getCost() const;
     int *getPosition() const;
 
     // gameplay methods

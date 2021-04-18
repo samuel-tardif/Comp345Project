@@ -28,7 +28,7 @@ public:
 	ComputeScore(const ComputeScore& copied);
 
 	//Constructor with parameters
-	ComputeScore(Player* p1, Player* p2, Map* m);
+	ComputeScore(Player* p1, Player* p2, Map* m); //Changed from pointer to references
 
 	//operator overloads =
 	ComputeScore& operator= (const ComputeScore& bF);

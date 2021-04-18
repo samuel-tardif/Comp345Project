@@ -23,7 +23,6 @@ class Player {
 
 	private:
 		int *coins;
-		int *birthday;
 		Hand *hand;
 
 		int *cubes; //Armies
@@ -42,7 +41,7 @@ public:
 
 	//Parameterized constructor
 	Player(string name);
-	Player(const Player& copied);
+	Player(Player& copied);
 	Player& operator = (const Player &p);
 
 	//Actions

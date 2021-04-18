@@ -8,27 +8,28 @@ For COMP 345 -Assignment 1
 
 Player::Player()
 {
-	this->coins = nullptr;
-	this->name = nullptr;
-	this->disks = nullptr;
-	this->cubes = nullptr;
-	this->tokens = nullptr;
-	this->hand = nullptr; //Object of Hand class
+	this->coins = new int(0);
+	this->name = new string("Default");
+	this->disks = new int(0);
+	this->cubes = new int(0);
+	this->tokens = new int(0);
+	this->hand = new Hand(); //Object of Hand class
 }
 
 Player::Player(std::string name)
 {
-	this->coins = nullptr;
+	this->coins = new int(0);
 	this->name = new string(name); 
-	this->disks = nullptr;
-	this->cubes = nullptr;
-	this->tokens = nullptr;
-	this->hand = nullptr; //Object of Hand class
+	this->disks = new int(0);
+	this->cubes = new int(0);
+	this->tokens = new int(0);
+	this->hand = new Hand(); //Object of Hand class
 }
 
 //copy constructors
 //https://stackoverflow.com/questions/781760/copy-constructor-with-pointers
-Player::Player(const Player& copied)
+//https://stackoverflow.com/questions/21351933/c-vector-of-classes-push-back-error
+Player::Player(Player& copied)
 {
 	//Allocating space in the heap
 	Player::name = new std::string();
@@ -62,23 +63,23 @@ Player& Player::operator=(const Player& p)
 
 //Mutators
 void Player::SetCubes(int cubes) {
-	Player::cubes = &cubes;
+	*this->cubes = cubes;
 }
 
 void Player::SetDisks(int disks) {
-	Player::disks = &disks;
+	*this->disks = disks;
 }
 
 void Player::SetTokens(int tokens)
 {
-	Player::tokens = &tokens;
+	*this->tokens = tokens;
 }
 
 //Added by Bumsu David Park
 
 //Mutators for coins 
 void Player::setCoins(int coins) {
-	this->coins = new int(coins);
+	*this->coins = coins;
 }
 
 int Player::getCubes() const
@@ -219,7 +220,11 @@ void Player::setBid(Player* player) {
 
 void Player::setName(std::string name)
 {
-	*Player::name = name;
+	*this->name = std::move(name); //L VALUES AND R VALUES THING
+	//STD STRING CLASS, DOING ASSIGNMENT OPERATION...
+	//STD STRING OVERLOADS ASSIGNMENT OPERATOR
+	//ASSIGNMENT OPERATOR WITH REFERENCE
+	//MOVE(NAME) MAKES IT INTO L VALUE AND LEFT SIDE BECOMES R VALUE AND OWNS IT.
 }
 
 //Hand related
