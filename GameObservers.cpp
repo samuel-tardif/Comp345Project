@@ -24,9 +24,13 @@ void Observable::Detach(Observer* o) {
 	_observers->remove(o);
 };
 void Observable::Notify() {
+	//cout << "In notify method" << endl;
 	list<Observer*>::iterator i = _observers->begin();
-	for (; i != _observers->end(); ++i)
+	for (; i != _observers->end(); ++i){
 		(*i)->Update();
+		//cout << "CalledUpdate" << endl;
+	}
+		
 };
 /*
 

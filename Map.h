@@ -8,6 +8,7 @@ For COMP 345 -Assignment 1
 //This is the header file of part 1, the map
 
 #pragma once
+
 #include <list>
 #include <vector>
 #include <array>
@@ -104,7 +105,7 @@ public:
 
 	//Destructor
 	~Map();
-	
+
 private:
 
 	

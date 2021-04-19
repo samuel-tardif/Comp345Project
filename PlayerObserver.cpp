@@ -23,6 +23,8 @@ void PlayerObserver::Update()
 
 void PlayerObserver::display()
 {
-	cout << "display Player through observer" << endl;
-	//cout << *_subject << endl;
+	cout << "Display Player through observer" << endl;
+	cout <<  "Coins : " << _subject->getCoins() << endl;
+	cout << "Disks : " << _subject->getDisks() << endl;
+	cout << "Cubes : " << _subject->getCubes() << endl;
 }

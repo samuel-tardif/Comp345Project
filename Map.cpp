@@ -8,7 +8,6 @@ For COMP 345 -Assignment 1
 //This is the cpp file of part 1, the map
 #pragma once
 
-#include "GameStateObserver.h"
 #include "Map.h"
 #include <iostream>
 
@@ -319,22 +318,26 @@ int Map::Territory::getContinent() const
 void Map::Territory::setOwner(int newOwner)
 {
 	*owner = newOwner;
+	Notify();
 }
 
 //Standard setter
 void Map::Territory::setNbArmies1(int newNbArmies)
 {
 	*nbArmies1 = newNbArmies;
+	Notify();
 }
 void Map::Territory::setNbArmies2(int newNbArmies)
 {
 	*nbArmies2 = newNbArmies;
+	Notify();
 }
 
 //Standard setter
 void Map::Territory::setContinent(int cont)
 {
 	*this->continent = cont;
+	Notify();
 }
 
 //Overriding = operator for TErritory

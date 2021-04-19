@@ -23,7 +23,7 @@ class Player : public Observable {
 
 	private:
 		int *coins;
-		Hand *hand;
+		Hand* hand;
 
 		int *cubes; //Armies
 		int *disks; //Cities
@@ -74,6 +74,7 @@ public:
 	//accessors
 	int getCoins() const;
 	Hand getHand() const;
+	Hand* getHandP();
 	int getCubes() const;
 	int getDisks() const;
 	int getTokens() const;

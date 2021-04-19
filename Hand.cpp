@@ -43,9 +43,11 @@ void Hand::setHand(const Cards& c) {
 	Cards *insertedCard = new Cards(c);
 	hand.push_back(insertedCard);
 	cout << "Top card is now: " << *hand[0] << endl;
-
+	//cout << "about to notfiy" << endl;
+	Notify();
 }
 //Not sure to where it is used...
 void Hand::swapHand(vector<Cards*>& v) {
 	hand = v;
+	Notify();
 }

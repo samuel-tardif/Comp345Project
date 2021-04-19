@@ -1,6 +1,12 @@
 #include "GameEngine.h"
-//#include "GameState.h"
+#include "GameState.h"
 #include "ComputeScore.h"
+#include "GameObservers.h"
+#include "GameStateObserver.h"
+#include "PlayerObserver.h"
+#include "HandObserver.h"
+#include "TerritoryObserver.h"
+
 
 class Player;
 class Cards;
@@ -198,6 +204,13 @@ void GameEngine::tournamentMode() {
         map = loader.GenerateMap();
     }
     //TO HERE
+    //Getting oour territories vector
+    vector<vector<Map::Territory*>>* v = map->getTerritoriesVector();
+
+    //For all territories setting up and observer
+    for (int i = 0; i < v->size(); i++) {
+        TerritoryObserver to = TerritoryObserver(v->at(i).at(0));
+    }
 
 
     //The number of turns in each game
@@ -241,6 +254,11 @@ void GameEngine::tournamentMode() {
         cout << "Enter the your player name: ";
         getline(cin, name) >> name;
         Player* p = new Player(name); //I'm inside a for loop, as soon as I get out of for loop it disappears so I need to make it into pointer.
+       
+        PlayerObserver* po = new PlayerObserver(p); //Attaching an observer to player
+     
+        
+
         
         //Give coins to each player.
         p->setCoins(initialCoins);
@@ -251,6 +269,10 @@ void GameEngine::tournamentMode() {
         //Had segmentation fault here because p->getname was pointing to a nullpointer
         std::cout << p->getNameForOthers() << " is ready, and has " << p->getCoinsForOthers() << " coins." << std::endl << std::endl;
     }
+
+    HandObserver* ho1 = new HandObserver(players.at(0)->getHandP()); //Attaching an observer to Game Hand
+    HandObserver* ho2 = new HandObserver(players.at(1)->getHandP()); //Attaching an observer to Game Hand
+
 
     vector<Player*> playersOfThisRound;
     vector<Player*> previousWinner;
@@ -418,12 +440,20 @@ void GameEngine::tournamentMode() {
             }
         }
 
+        //Creating a gameState and its observer
+        GameState gameState = GameState();
+        GameStateObserver gameObv = GameStateObserver(&gameState);
+
+
         indexOfPlayers = 0;
         //Keep playing until turn 20
         for (int turn = 0; turn < 20; turn++) {
             //This decides whose turn it is.
             std::cout << "Turn #" << turn+1 << endl << endl;
             std::cout << "It is currently " << players[indexOfPlayers]->getNameForOthers() << "'s turn to play." << std::endl << endl;
+            //Game state changed
+            cout << endl;
+            gameState.setCurrentPlayer(players[indexOfPlayers]);
             
             //Buy
             deck.exchange(players[indexOfPlayers], *topboard, deck); //You have to dereference because you are taking a reference to a player.

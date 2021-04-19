@@ -24,6 +24,6 @@ void GameStateObserver::display()
 {
 	cout << "display GameState with observer" << endl;
 	cout << "********************************************************************************************" << endl;
-	cout << "Player turn : " << _subject << endl;
+	cout << "Player turn : " << *_subject << endl;
 	cout << "********************************************************************************************" << endl;
 }

@@ -253,10 +253,11 @@ void Deck::exchange(Player* player, std::vector<Cards*>& topBoard, Deck& deck) {
     //vector<Cards*> playerHand = player.getGameHand();
 
     // update gamehand and update top board
-    player->getHandContent().push_back(topBoard[index]);
+    // player->getHandContent().push_back(topBoard[index]);
+    player->getHand().setHand(*topBoard[index]);
     topBoard.erase(topBoard.begin() + index);
     topBoard.emplace_back(deck.draw());
-    cout << player->getNameForOthers() << " added [" << *player->getHandContent().back() << "] to their hand." << endl << endl; //
+    //cout << player->getNameForOthers() << " added [" << *player->getHandContent().back() << "] to their hand." << endl << endl; //
 }
 
 //The function to print the content of the deck

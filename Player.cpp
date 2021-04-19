@@ -4,6 +4,9 @@ ID: 40111703
 Date : 21/02/2021
 For COMP 345 -Assignment 1
 ------------------------------------------------------------------------------------------------*/
+#pragma once
+
+#include "GameObservers.h"
 #include "Player.h"
 
 Player::Player()
@@ -24,6 +27,7 @@ Player::Player(std::string name)
 	this->cubes = new int(0);
 	this->tokens = new int(0);
 	this->hand = new Hand(); //Object of Hand class
+
 }
 
 //copy constructors
@@ -64,10 +68,12 @@ Player& Player::operator=(const Player& p)
 //Mutators
 void Player::SetCubes(int cubes) {
 	*this->cubes = cubes;
+	Notify();
 }
 
 void Player::SetDisks(int disks) {
 	*this->disks = disks;
+	Notify();
 }
 
 void Player::SetTokens(int tokens)
@@ -80,6 +86,7 @@ void Player::SetTokens(int tokens)
 //Mutators for coins 
 void Player::setCoins(int coins) {
 	*this->coins = coins;
+	Notify();
 }
 
 int Player::getCubes() const
@@ -144,6 +151,7 @@ bool Player::payCoin(int cost)
 		std::cout << "Successful purchase " << *name << ", you have " << *coins << " coins remaining in your pile." << std::endl << std::endl;
 		return true;
 	}
+	Notify();
 }
 
 //Actions
@@ -160,6 +168,7 @@ void Player::placeNewArmies(Map m, int numArmies, int index, int player) {
 		//If the player has too few armies
 		cerr << "\nOperation blocked. You only have " << *cubes << " armies available to you.";
 	}
+	Notify();
 }
 
 /*
@@ -241,6 +250,13 @@ vector<Cards*>& Player::getHand() const{
 
 Hand Player::getHand() const {
 	return *hand;
+}
+
+Hand* Player::getHandP()
+{
+	Hand* h = new Hand();
+	h = hand;
+	return h;
 }
 
 //Do not change this (For deck)
