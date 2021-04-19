@@ -45,16 +45,48 @@ bool GameEngine::selectGameMode() {
 };
 
 void GameEngine::singleGameMode() {
+	
+    std::cout << "SINGLE GAME MODE" << endl;
+    //Validate map
+    //COMMENT OUT FROM HERE========================================
+    bool validMap = false;
 
-    //GameState state = GameState(false);
+    // load map
+    MapLoader loader;
 
+    Map* map = nullptr;
+
+    // get file location
+    std::string fileLocation;
+
+    while (!map) { //true if map is a nullptr, nullptr is basically false.
+        std::cout << "Enter map file location: ";
+        std::cin >> fileLocation;
+        loader.setFileName(fileLocation);
+        map = loader.GenerateMap();
+    }
+    //MANUALLY CREATING MAP
+    map = nullptr;
+    map = new Map();
+
+    map->addTerritory(0,0,0,1);
+   
+    map->addTerritory(0,0,0,1);
+
+    map->addTerritory(0,0, 0, 2);
+
+    map->addTerritory(0, 0,0, 2);
+
+    //Linking them
+    map->createConnection(0, 1);
+    map->createConnection(2, 1);
+    map->createConnection(2, 3);
+    //TO HERE
     int numOfPlayers;
 
     int initialCoins;
 
     vector<Player*> players;
-
-    Map m;
 
     //Obtain the number of players who will be playing this game.
     std::cout << "How many people are playing (2~4)? : ";
@@ -118,7 +150,45 @@ void GameEngine::singleGameMode() {
     //Draw 6 cards (top board)
     vector<Cards*> *topboard = deck.topBoardGenetor(deck);
     deck.displayTopBoard(*topboard);
+    for (int i = 0; i < numOfPlayers; i++) {
 
+        players[i]->SetCubes(14);
+
+        players[i]->SetDisks(3);
+
+        players[i]->placeNewArmies(*map, 3, 0, i);
+            
+        std::cout << "Choose the index of the territory you want to place your army (except the starting region)." << std::endl;
+        int index;
+        cin >> index;
+        while (index == 0 || index > map->getTerritoriesVector()->size()) {
+            std::cout << "You can't place your army there. Try again: " << endl;
+            cin >> index;
+        };
+            
+    }
+
+    int indexOfPlayers = 0;
+        
+    if (numOfPlayers == 2) {
+        Player* npc = new Player();
+        npc->SetCubes(10);
+        int selectTerr = 0;
+        for (int i = 0; i < npc->getCubesForOthers(); i++) {
+
+            indexOfPlayers %= 2; //This decides whose turn it is.
+
+            std::cout << players[indexOfPlayers]->getName() << ", enter the territory index to place non-player army: ";
+            cin >> selectTerr;
+            while (selectTerr > map->getTerritoriesVector()->size() || selectTerr < 1) {
+                std::cout << "Invalid Territory ID. Try again: ";
+                cin >> selectTerr;
+            }
+            players[i]->placeNewArmies(*map, selectTerr, 1, numOfPlayers+1);
+            indexOfPlayers++;
+        }
+    }
+	
     //Bidding
     //Obtain the bidding coins of each player.
     std::cout << endl;
@@ -178,6 +248,8 @@ void GameEngine::singleGameMode() {
     }
     while (continueTheGame == true);
 
+    ComputeScore cp(players[0], players[1], map);
+    cp.determineWinner();
 
 //======================================== END OF SINGLE GAME MODE MAIN LOOP ========================================
 
@@ -204,6 +276,23 @@ void GameEngine::tournamentMode() {
         map = loader.GenerateMap();
     }
     //TO HERE
+    //MANUALLY CREATING MAP
+    map = nullptr;
+    map = new Map();
+
+    map->addTerritory(0,0,0,1);
+   
+    map->addTerritory(0,0,0,1);
+
+    map->addTerritory(0,0, 0, 2);
+
+    map->addTerritory(0, 0,0, 2);
+
+    //Linking them
+    map->createConnection(0, 1);
+    map->createConnection(2, 1);
+    map->createConnection(2, 3);
+
     //Getting oour territories vector
     vector<vector<Map::Territory*>>* v = map->getTerritoriesVector();
 
@@ -218,7 +307,7 @@ void GameEngine::tournamentMode() {
 //======================================== TOURNAMENT MODE MAIN LOOP ========================================
     int numOfPlayers;
 
-    int initialCoins;
+    int initialCoins = 14;
 
     vector<Player*> players;
 
@@ -233,19 +322,6 @@ void GameEngine::tournamentMode() {
         std::cout << "Invalid player count, please select a number between 2 and 4: ";
         std::cin >> numOfPlayers;
     }
-    
-    //Decide how many coins each player will have.
-    switch (numOfPlayers) {
-	case 2:
-		initialCoins = 14;
-		break;
-	case 3:
-		initialCoins = 11;
-		break;
-	case 4:
-		initialCoins = 9;
-		break;
-	}
     
     //Create players
     for (int i = 0; i < numOfPlayers; i++) {
@@ -293,13 +369,21 @@ void GameEngine::tournamentMode() {
 
         //DECIDING THE PLAYERS THAT ARE GOING TO PLAY THIS ROUND (MAYBE RANDOMIZE? NOT THE PRIORITY RIGHT NOW)
         if (numOfBrackets == 0) {
+
+            for (int i = 0; i < 2; i++) {
+                playersOfThisRound.push_back(players[i]);
+            }
+
+            if (numOfPlayers == 2) {
+                std::cout << "====== The first and the final round (" << playersOfThisRound[0]->getNameForOthers() << " vs " << playersOfThisRound[1]->getNameForOthers() << ")======" << std::endl;
+            }
+
+            else {
+                std::cout << "====== The first round (" << playersOfThisRound[0]->getNameForOthers() << " vs " << playersOfThisRound[1]->getNameForOthers() << ")======" << std::endl;
+            }
             /*
             The first round is always done by the first 2 players
             */
-            for (int i = 0; i < 2; i++) {
-                playersOfThisRound.push_back(players[i]);
-            } 
-            std::cout << "====== The first and the final round (" << playersOfThisRound[0]->getNameForOthers() << " vs " << playersOfThisRound[1]->getNameForOthers() << ")======" << std::endl;
         }
 
         if (numOfBrackets == 1) {
@@ -361,14 +445,14 @@ void GameEngine::tournamentMode() {
         //Draw 6 cards (top board)
         vector<Cards*> *topboard = deck.topBoardGenetor(deck);
         deck.displayTopBoard(*topboard);
-        /*
+	    
         for (int i = 0; i < numOfPlayers; i++) {
 
             players[i]->SetCubes(14);
 
             players[i]->SetDisks(3);
 
-            players[i]->placeNewArmies(*map, 4, 0, i);
+            players[i]->placeNewArmies(*map, 3, 0, i);
             
             std::cout << "Choose the index of the territory you want to place your army (except the starting region)." << std::endl;
             int index;
@@ -377,15 +461,11 @@ void GameEngine::tournamentMode() {
                 std::cout << "You can't place your army there. Try again: " << endl;
                 cin >> index;
             };
-            players[i]->placeNewArmies(*map, 1, index, i); //THIS CALL HAS PROBLEMS
+            
         }
 
-        for (int i = 0; i < numOfPlayers; i++) {
-
-        }
-        */
         int indexOfPlayers = 0;
-        /*
+        
         if (numOfPlayers == 2) {
             Player* npc = new Player();
             npc->SetCubes(10);
@@ -394,7 +474,7 @@ void GameEngine::tournamentMode() {
 
                 indexOfPlayers %= 2; //This decides whose turn it is.
 
-                std::cout << players[i]->getName() << ", enter the territory index to place non-player army: ";
+                std::cout << players[indexOfPlayers]->getName() << ", enter the territory index to place non-player army: ";
                 cin >> selectTerr;
                 while (selectTerr > map->getTerritoriesVector()->size() || selectTerr < 1) {
                     std::cout << "Invalid Territory ID. Try again: ";
@@ -405,7 +485,6 @@ void GameEngine::tournamentMode() {
                 indexOfPlayers++;
             }
         }
-        */
         
 
         //Bidding
@@ -431,11 +510,11 @@ void GameEngine::tournamentMode() {
         //the winner goes first 
         int playerOrder = 0;
 
-        for (auto it = players.begin(); it != players.end(); ++it, playerOrder++) {
-            if ((players[playerOrder])->getName() == winner->getName()) {
+        for (auto it = playersOfThisRound.begin(); it != playersOfThisRound.end(); ++it, playerOrder++) {
+            if ((playersOfThisRound[playerOrder])->getName() == winner->getName()) {
                 auto first = *it;
-                players.erase(it);
-                players.insert(players.begin(), first /* or std::move(first)*/) ;
+                playersOfThisRound.erase(it);
+                playersOfThisRound.insert(playersOfThisRound.begin(), first /* or std::move(first)*/) ;
                 break;
             }
         }
@@ -450,28 +529,31 @@ void GameEngine::tournamentMode() {
         for (int turn = 0; turn < 20; turn++) {
             //This decides whose turn it is.
             std::cout << "Turn #" << turn+1 << endl << endl;
-            std::cout << "It is currently " << players[indexOfPlayers]->getNameForOthers() << "'s turn to play." << std::endl << endl;
+            std::cout << "It is currently " << playersOfThisRound[indexOfPlayers]->getNameForOthers() << "'s turn to play." << std::endl << endl;
             //Game state changed
             cout << endl;
             gameState.setCurrentPlayer(players[indexOfPlayers]);
             
             //Buy
-            deck.exchange(players[indexOfPlayers], *topboard, deck); //You have to dereference because you are taking a reference to a player.
+            deck.exchange(playersOfThisRound[indexOfPlayers], *topboard, deck); //You have to dereference because you are taking a reference to a player.
 
             indexOfPlayers++;
             indexOfPlayers %= 2;
             //Had to place indexOfPlayer%2 after indexOfPlayer++
         }
         //DESTRUCTORS EACH ROUND?
-        cout << "out of for loop" << endl;
-    }
-    //Obtain and show the results
-    ComputeScore cp(players[0], players[1], map);
-    cp.determineWinner();
+        //Obtain and show the results
+        ComputeScore cp(playersOfThisRound[0], playersOfThisRound[1], map);
 
+        previousWinner.push_back(cp.determineWinner());
+
+        for (int i = 0; i < 2; i ++) {
+            playersOfThisRound.pop_back();
+        }
+    }
+    delete map;
     for (auto* p: players) {
         delete p;
     }
-    delete map;
     cout<< "End of tournament mode" << endl;
 };
