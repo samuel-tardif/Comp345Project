@@ -16,7 +16,7 @@ For COMP 345 -Assignment 1
 #include <map>
 #include "GameObservers.h"
 
-class Map {
+class Map : public Observable{
 public:
 	
 
