@@ -40,8 +40,42 @@ bool GameEngine::selectGameMode() {
 
 void GameEngine::singleGameMode() {
 
-    //GameState state = GameState(false);
+    std::cout << "SINGLE GAME MODE" << endl;
+    //Validate map
+    //COMMENT OUT FROM HERE========================================
+    bool validMap = false;
 
+    // load map
+    MapLoader loader;
+
+    Map* map = nullptr;
+
+    // get file location
+    std::string fileLocation;
+
+    while (!map) { //true if map is a nullptr, nullptr is basically false.
+        std::cout << "Enter map file location: ";
+        std::cin >> fileLocation;
+        loader.setFileName(fileLocation);
+        map = loader.GenerateMap();
+    }
+    //MANUALLY CREATING MAP
+    map = nullptr;
+    map = new Map();
+
+    map->addTerritory(0,0,0,1);
+   
+    map->addTerritory(0,0,0,1);
+
+    map->addTerritory(0,0, 0, 2);
+
+    map->addTerritory(0, 0,0, 2);
+
+    //Linking them
+    map->createConnection(0, 1);
+    map->createConnection(2, 1);
+    map->createConnection(2, 3);
+    //TO HERE
     int numOfPlayers;
 
     int initialCoins;
@@ -172,6 +206,9 @@ void GameEngine::singleGameMode() {
     }
     while (continueTheGame == true);
 
+    ComputeScore cp(players[0], players[1], map);
+    cp.determineWinner();
+
 
 //======================================== END OF SINGLE GAME MODE MAIN LOOP ========================================
 
@@ -198,14 +235,29 @@ void GameEngine::tournamentMode() {
         map = loader.GenerateMap();
     }
     //TO HERE
+    //MANUALLY CREATING MAP
+    map = nullptr;
+    map = new Map();
 
+    map->addTerritory(0,0,0,1);
+   
+    map->addTerritory(0,0,0,1);
+
+    map->addTerritory(0,0, 0, 2);
+
+    map->addTerritory(0, 0,0, 2);
+
+    //Linking them
+    map->createConnection(0, 1);
+    map->createConnection(2, 1);
+    map->createConnection(2, 3);
 
     //The number of turns in each game
     int gamenLength = 20; 
 //======================================== TOURNAMENT MODE MAIN LOOP ========================================
     int numOfPlayers;
 
-    int initialCoins;
+    int initialCoins = 14;
 
     vector<Player*> players;
 
@@ -220,19 +272,6 @@ void GameEngine::tournamentMode() {
         std::cout << "Invalid player count, please select a number between 2 and 4: ";
         std::cin >> numOfPlayers;
     }
-    
-    //Decide how many coins each player will have.
-    switch (numOfPlayers) {
-	case 2:
-		initialCoins = 14;
-		break;
-	case 3:
-		initialCoins = 11;
-		break;
-	case 4:
-		initialCoins = 9;
-		break;
-	}
     
     //Create players
     for (int i = 0; i < numOfPlayers; i++) {
@@ -255,7 +294,7 @@ void GameEngine::tournamentMode() {
     vector<Player*> playersOfThisRound;
     vector<Player*> previousWinner;
     //THE TOTAL NUMBER OF ROUNDS IN A TOURNAMENT GAME
-    for (int numOfBrackets = 0; numOfBrackets <= numOfPlayers%2; numOfBrackets++) {
+    for (int numOfBrackets = 0; numOfBrackets < numOfPlayers-1; numOfBrackets++) {
         /*
         state.numOfPlayer%2, when numOfPlayers = 4, is 2. The total number of games that will be conducted is player 1 vs player 2
         player 3 vs player 4, and the winner of the first round vs the winner of the second round.
@@ -271,13 +310,21 @@ void GameEngine::tournamentMode() {
 
         //DECIDING THE PLAYERS THAT ARE GOING TO PLAY THIS ROUND (MAYBE RANDOMIZE? NOT THE PRIORITY RIGHT NOW)
         if (numOfBrackets == 0) {
+
+            for (int i = 0; i < 2; i++) {
+                playersOfThisRound.push_back(players[i]);
+            }
+
+            if (numOfPlayers == 2) {
+                std::cout << "====== The first and the final round (" << playersOfThisRound[0]->getNameForOthers() << " vs " << playersOfThisRound[1]->getNameForOthers() << ")======" << std::endl;
+            }
+
+            else {
+                std::cout << "====== The first round (" << playersOfThisRound[0]->getNameForOthers() << " vs " << playersOfThisRound[1]->getNameForOthers() << ")======" << std::endl;
+            }
             /*
             The first round is always done by the first 2 players
             */
-            for (int i = 0; i < 2; i++) {
-                playersOfThisRound.push_back(players[i]);
-            } 
-            std::cout << "====== The first and the final round (" << playersOfThisRound[0]->getNameForOthers() << " vs " << playersOfThisRound[1]->getNameForOthers() << ")======" << std::endl;
         }
 
         if (numOfBrackets == 1) {
@@ -318,7 +365,9 @@ void GameEngine::tournamentMode() {
             }
             std::cout << "====== The final round (" << playersOfThisRound[0]->getNameForOthers() << " vs " << playersOfThisRound[1]->getNameForOthers() << ")======" << std::endl;
         }
-
+        for (int i = 0; i < playersOfThisRound.size(); i++) {
+            playersOfThisRound[i]->setCoins(14);
+        }
         //Create different deck depending on the number of players
         //The deck is shuffled when it is created.
         cout << "==Creating the deck==" << endl << endl;
@@ -339,7 +388,7 @@ void GameEngine::tournamentMode() {
         //Draw 6 cards (top board)
         vector<Cards*> *topboard = deck.topBoardGenetor(deck);
         deck.displayTopBoard(*topboard);
-        /*
+
         for (int i = 0; i < numOfPlayers; i++) {
 
             players[i]->SetCubes(14);
@@ -361,9 +410,9 @@ void GameEngine::tournamentMode() {
         for (int i = 0; i < numOfPlayers; i++) {
 
         }
-        */
+
         int indexOfPlayers = 0;
-        /*
+        
         if (numOfPlayers == 2) {
             Player* npc = new Player();
             npc->SetCubes(10);
@@ -383,8 +432,7 @@ void GameEngine::tournamentMode() {
                 indexOfPlayers++;
             }
         }
-        */
-        
+
 
         //Bidding
         //Obtain the bidding coins of each player.
@@ -409,11 +457,11 @@ void GameEngine::tournamentMode() {
         //the winner goes first 
         int playerOrder = 0;
 
-        for (auto it = players.begin(); it != players.end(); ++it, playerOrder++) {
-            if ((players[playerOrder])->getName() == winner->getName()) {
+        for (auto it = playersOfThisRound.begin(); it != playersOfThisRound.end(); ++it, playerOrder++) {
+            if ((playersOfThisRound[playerOrder])->getName() == winner->getName()) {
                 auto first = *it;
-                players.erase(it);
-                players.insert(players.begin(), first /* or std::move(first)*/) ;
+                playersOfThisRound.erase(it);
+                playersOfThisRound.insert(playersOfThisRound.begin(), first /* or std::move(first)*/) ;
                 break;
             }
         }
@@ -423,25 +471,35 @@ void GameEngine::tournamentMode() {
         for (int turn = 0; turn < 20; turn++) {
             //This decides whose turn it is.
             std::cout << "Turn #" << turn+1 << endl << endl;
-            std::cout << "It is currently " << players[indexOfPlayers]->getNameForOthers() << "'s turn to play." << std::endl << endl;
+            std::cout << "It is currently " << playersOfThisRound[indexOfPlayers]->getNameForOthers() << "'s turn to play." << std::endl << endl;
             
             //Buy
-            deck.exchange(players[indexOfPlayers], *topboard, deck); //You have to dereference because you are taking a reference to a player.
+            deck.exchange(playersOfThisRound[indexOfPlayers], *topboard, deck); //You have to dereference because you are taking a reference to a player.
 
             indexOfPlayers++;
             indexOfPlayers %= 2;
             //Had to place indexOfPlayer%2 after indexOfPlayer++
         }
         //DESTRUCTORS EACH ROUND?
-        cout << "out of for loop" << endl;
-    }
-    //Obtain and show the results
-    ComputeScore cp(players[0], players[1], map);
-    cp.determineWinner();
+        //Obtain and show the results
+        ComputeScore cp(playersOfThisRound[0], playersOfThisRound[1], map);
 
+        previousWinner.push_back(cp.determineWinner());
+
+        for (int i = 0; i < 2; i ++) {
+            playersOfThisRound.pop_back();
+        }
+        /*
+        for (auto* p: players) {
+            delete p;
+        }
+        */
+        //delete map;
+    }
+    delete map;
     for (auto* p: players) {
         delete p;
     }
-    delete map;
-    cout<< "End of tournament mode" << endl;
+
+    cout << "End of tournament mode" << endl << endl;
 };

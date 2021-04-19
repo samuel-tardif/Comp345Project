@@ -101,7 +101,7 @@ Player* ComputeScore::determineWinner()
 	//Points run-down
 	//Player 1
 	int player1Total = 0;
-	cout << " Player 1 points :" << endl << endl;
+	cout << player1->getNameForOthers() << "'s points :" << endl << endl;
 	player1Total += *player1Territories;
 	cout << " Territories : " << *player1Territories << endl;
 	player1Total += *player1Continent;
@@ -112,7 +112,7 @@ Player* ComputeScore::determineWinner()
 
 	//Player  2
 	int player2Total = 0;
-	cout << " Player 2 points :" << endl << endl;
+	cout << player2->getNameForOthers() << "'s points :" << endl << endl;
 	player2Total += *player2Territories;
 	cout << " Territories : " << *player2Territories << endl;
 	player2Total += *player2Continent;
@@ -123,52 +123,61 @@ Player* ComputeScore::determineWinner()
 
 	//Dertermining winner
 	if (player1Total > player2Total) {
-		cout << " Player 1 wins with more victory points" << endl << endl;
+		cout << player1->getNameForOthers() << " wins with more victory points" << endl << endl;
+		return player1;
 	}
 	if (player1Total < player2Total) {
-		cout << " Player 2 wins with more victory points" << endl << endl;
+		cout << player2->getNameForOthers() << " wins with more victory points" << endl << endl;
+		return player2;
 	}
 	//Equality -> tie breakers
 	if (player1Total == player2Total) {
-		cout << " Both payers have the same amount of victory points" << endl << endl;
+		cout << " Both players have the same amount of victory points" << endl << endl;
 		//Gold tie breaker
 		if (player1->getTokens() > player2->getTokens()) {
-			cout << " Player 1 wins with more gold" << endl << endl;
+			cout << player1->getNameForOthers() << " wins with more gold" << endl << endl;
+			return player1;
 		}
 		if (player1->getTokens() < player2->getTokens()) {
-			cout << " Player 2 wins with more gold" << endl << endl;
+			cout << player2->getNameForOthers() << " wins with more gold" << endl << endl;
+			return player2;
 		}
 		//Equality next tie breaker
 		if (player1->getTokens() < player2->getTokens()) {
 			cout << " Both players have as much gold" << endl << endl;
 			//Gold tie breaker
 			if (*player1TotalArmies > *player2TotalArmies) {
-				cout << " Player 1 wins with more armies" << endl << endl;
+				cout << player1->getNameForOthers() << " wins with more armies" << endl << endl;
+				return player1;
 			}
 			if (*player1TotalArmies < *player2TotalArmies) {
-				cout << " Player 2 wins with more armies" << endl << endl;
+				cout << player2->getNameForOthers() << " wins with more armies" << endl << endl;
+				return player2;
 			}
 			//Equality next tie breaker
 			if (*player1TotalArmies == *player2TotalArmies) {
 				cout << " Both players have just as many armies" << endl << endl;
 				//Territories tie breaker
 				if (*player1Territories > *player2Territories) {
-					cout << " Player 1 wins with more territories" << endl << endl;
+					cout << player1->getNameForOthers() << " wins with more territories" << endl << endl;
+					return player1;
 				}
 				if (*player1Territories < *player2Territories) {
-					cout << " Player 2 wins with more territories" << endl << endl;
+					cout << player2->getNameForOthers() << " wins with more territories" << endl << endl;
+					return player2;
 				}
 				if (*player1Territories == *player2Territories) {
 					cout << " IT'S A DRAW!!!" << endl << endl;
+					return player1;
 				}
 			}
 		}
 	}
-
+	return nullptr;
 
 	//No memory leaks here (i hope) Actualllly delete makes my program crash, I will need help
 	//delete player1CardScore, player1Continent, player1Territories, player1TotalArmies, player2Continent, player2Territories, player2TotalArmies, player2CardScore, p1Ellixirs,p2Elixirs;
-	return nullptr;
+	//return nullptr;
 }
 
 //Method to dertermine how many points our hand is worth
@@ -341,7 +350,7 @@ void ComputeScore::tallyGameHand(std::vector<Cards*> GameHand, int* playerCardSc
 		}
 
 		//Check for Mountain Dwarf
-		found = name.find("Nobe Hills");
+		found = name.find("Noble Hills");
 		if (found != std::string::npos) {
 			//For this one we need to count Mountain cards
 			int totalMountain = 0;
@@ -417,9 +426,9 @@ void ComputeScore::tallyContinent(int contIndex, int* player1Continent,
 
 	//We now update the scores accordingly
 	*player1Territories += *player1TerritoriesOnContinent;
-	cout << *player1TerritoriesOnContinent << " territories for player 1 on continent : " << contIndex << endl;
+	cout << *player1TerritoriesOnContinent << " territories for " << player1->getNameForOthers() << " on continent : " << contIndex << endl;
 	*player2Territories += *player2TerritoriesOnContinent;
-	cout << *player2TerritoriesOnContinent << " territories for player 2 on continent : " << contIndex << endl;
+	cout << *player2TerritoriesOnContinent << " territories for " << player2->getNameForOthers() << " on continent : " << contIndex << endl;
 
 	//Score for the wholle continent
 	if (*player1TerritoriesOnContinent > *player2TerritoriesOnContinent) {
@@ -458,14 +467,14 @@ void ComputeScore::DFS(int visiting, vector<bool>* visited,
 	//We give a point to whoever has the most armies
 	if (p1Armies > p2Armies) {
 		*player1TerritoriesOnContient += 1;
-		cout << "p1Armies : " << p1Armies << " p2Armies : " << p2Armies << "  Points given to player 1, territories on continent :  " << *player1TerritoriesOnContient << endl;
+		cout << player1->getNameForOthers() << "'s armies : " << " " << p1Armies << ", " << player2->getNameForOthers() << "'s armies : " << p2Armies << "  Points given to " << player1->getNameForOthers() << ", territories on continent :  " << *player1TerritoriesOnContient << endl;
 	}
 	else if (p1Armies < p2Armies) {
 		*player2TerritoriesOnContient += 1;
-		cout << "p1Armies : " << p1Armies << " p2Armies : " << p2Armies << "  Points given to player 2, territories on continent :  " << *player2TerritoriesOnContient  << endl;
+		cout << player1->getNameForOthers() << "'s armies : " << " " << p1Armies << ", " << player1->getNameForOthers() << "'s armies : " << p2Armies << "  Points given to " << player2->getNameForOthers() << ", territories on continent :  " << *player2TerritoriesOnContient  << endl;
 	}
 	else {
-	cout << "p1Armies : " << p1Armies << " p2Armies : " << p2Armies << " No points given" << endl;
+	cout << player1->getNameForOthers() << "'s armies : " << " " << p1Armies << player2->getNameForOthers() << "'s armies : " << p2Armies << " No points given" << endl;
 	}
 	
 
