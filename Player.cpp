@@ -171,63 +171,42 @@ void Player::placeNewArmies(Map m, int numArmies, int index, int player) {
 	Notify();
 }
 
-void Player::placeNewArmies(Map& m, int numArmies, int index, int player) {
-
-	//Check army availability. Can't place an army if theyre all already deployed
-
-	if ((*cubes - numArmies) >= 0) {
-
-		*cubes - numArmies;
-		m.changeNumberArmies(index, numArmies, player + 1);
-
-	}
-	else {
-		//If the player has too few armies
-		cerr << "\nOperation blocked. You only have " << *cubes << " armies available to you.";
-	}
-}
-
-void Player::MoveArmies(int nbarmy, Map::Territory& start, Map::Territory& stop)
+/*
+void Player::MoveArmies(int nbarmy, Map& start, Map& stop)
 {
 
-	int armystart = start.getNbArmies1();
-	int armystop = stop.getNbArmies1();
+	vector<int*> armystart = start.getnbArmies1();
+	vector<int*> armystop = stop.getNbArmies1();
 
-	start.setNbArmies1(armystart - nbarmy);
-	stop.setNbArmies1(armystop + nbarmy);
+	*armystart.at(*playerID) = armystart.at(*playerID) - nbarmy;
+	start.setNbArmies1(armystart);
+
+	*armystop.at(*playerID) = armystop.at(*playerID) + nbarmy;
+	stop.setNbArmies1(armystop);
 
 	std::cout << "moves army" << std::endl;
 }
-
-void Player::MoveOverLand(int nbarmies, Map::Territory& start, Map::Territory& stop, Map& m, int continent)
+*/
+/*
+void Player::MoveOverLand(int nbarmies, Map& start, Map& stop)
 {
-	if ((m.connectedContinent(continent) == true) && (m.connectedGraph() == true)) {
-		MoveArmies(nbarmies, start, stop);
-		std::cout << "moves over land" << std::endl;
-	}
-	else std::cout << "land is not connected, can't move over land" << std::endl;
+	
+	MoveArmies(nbarmies, start, stop);
+	std::cout << "moves over land" << std::endl;
 
 }
-
-void Player::MoveOverWater(int nbarmies, Map::Territory& start, Map::Territory& stop, Map& m, int continent)
-{
-	if ((m.connectedContinent(continent) == false) && (m.connectedGraph() == true)) {
-		MoveArmies(nbarmies, start, stop);
-		std::cout << "moves over water" << std::endl;
-	}
-	else std::cout << "land is no water to cross" << std::endl;
-}
-
+*/
 void Player::BuildCity(Map& cityplace)
 {
-	if (*disks == 0) {
+	if ( *disks == 0) {
 		std::cout << "no resources to build city" << std::endl;
 	}
 	else {
-		cityplace.addTerritory();
-		SetDisks(getDisks() - 1);
+		SetDisks( *disks - 1);
 		std::cout << "builds city" << std::endl;
 	}
+
+
 }
 
 /*
@@ -292,16 +271,4 @@ vector<Cards*>& Player::getHandSize() {
 void Player::setHand(vector<Cards*>& v) {
 	hand->swapHand(v);
 }
-ostream& operator << (ostream& out, const Player& player)
-{
-	out << player.name;
-	out << "Player name is: " << player.name << endl;
-	return out;
-}
 
-istream& operator >> (istream& in, Player& player)
-{
-	cout << "Enter name of player:";
-	in >> player.getName();
-	return in;
-}
