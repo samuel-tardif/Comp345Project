@@ -6,6 +6,7 @@
 #include "PlayerObserver.h"
 #include "HandObserver.h"
 #include "TerritoryObserver.h"
+#include "MapObserver.h"
 
 
 class Player;
@@ -28,7 +29,7 @@ bool GameEngine::selectGameMode() {
     cin >> userSelection;
 
     //MAKES SURE THAT THE USER CAN ONLY TYPE 1 OR 2
-    while(userSelection != "1" && userSelection != "2") {
+    (userSelection != "1" && userSelection != "2") {
         std::cout << "Please enter either a '1' or a '2': ";
         cin.ignore();
         cin >> userSelection;
@@ -81,6 +82,8 @@ void GameEngine::singleGameMode() {
     map->createConnection(0, 1);
     map->createConnection(2, 1);
     map->createConnection(2, 3);
+    //map observer
+    MapObserver m = MapObserver(map);
     //TO HERE
     int numOfPlayers;
 
