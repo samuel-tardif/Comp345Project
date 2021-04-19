@@ -51,8 +51,9 @@ public:
 	//bool payCoin(Player* p, int cost);
 
 	void placeNewArmies(Map m, int numArmies, int index, int player);
-	void MoveArmies(int nbarmy, Map &start, Map &stop);
-	void MoveOverLand(int nbarmies, Map& start, Map& stop);
+	void MoveArmies(int nbarmy, Map::Territory& start, Map::Territory& stop);
+	void MoveOverLand(int nbarmies, Map::Territory& start, Map::Territory& stop, Map& m, int continent);
+	void MoveOverWater(int nbarmies, Map::Territory& start, Map::Territory& stop, Map& m, int continent);
 	void BuildCity(Map& cityplace);
 	void DestroyArmy(Map &armyplace, Player& armyowner);
 	void initializeHand();
