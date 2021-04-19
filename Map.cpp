@@ -275,6 +275,7 @@ void Map::changeOwner(int index, int owner)
 {
 	territoriesVector->at(index).at(0)->setOwner(owner);
 	cout << "Territory " << index << " is now owned by player " << owner << endl;
+	Notify();
 }
 
 //Change continent from index
