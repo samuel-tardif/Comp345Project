@@ -9,6 +9,8 @@ For COMP 345 -Assignment 1
 #pragma once
 
 #include "Map.h"
+#include "GameObservers.h"
+
 #include <iostream>
 
 using std::cout;
