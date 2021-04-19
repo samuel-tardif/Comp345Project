@@ -221,7 +221,7 @@ void GameEngine::singleGameMode() {
     }
 
 //======================================== SINGLE GAME MODE MAIN LOOP ========================================
-    int indexOfPlayers = 0;
+    indexOfPlayers = 0;
     //Keep playing until everyone's hand is at least 11
     bool continueTheGame = false;
     do {
